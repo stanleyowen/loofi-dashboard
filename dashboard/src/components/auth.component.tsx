@@ -1,8 +1,26 @@
 import React, { useState, useEffect } from 'react'
+import { getFirestore, addDoc, collection } from "firebase/firestore"
 import { initializeApp } from 'firebase/app'
 import { GoogleAuthProvider, getAuth, signInWithRedirect, getRedirectResult } from 'firebase/auth'
 import { Button } from '@mui/material'
 import { randomBytes } from 'crypto'
+
+async function generateToken(admin: string) {
+    randomBytes(132, (err, byte) => {
+        const token:string = byte.toString('hex')
+        setToken(admin, token)
+    })
+}
+
+async function setToken(
+    admin: string,
+    token: string
+) {
+    await addDoc(collection(getFirestore(), "token"), {
+        admin, token
+    });
+    console.log('done')
+}
 
 const About = ({ config, handleCredential }: any) => {
     useEffect(() => {
@@ -11,7 +29,8 @@ const About = ({ config, handleCredential }: any) => {
         .then((result) => {
             console.log(result)
             if(result && result.user.email === process.env.REACT_APP_ADMIN_EMAIL) {
-                handleCredential(true)
+                // handleCredential(true)
+                generateToken(result.user.email)
             }
         })
         .catch(err => console.log(err))
