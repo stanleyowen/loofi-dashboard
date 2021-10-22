@@ -8,18 +8,26 @@ import { randomBytes } from 'crypto'
 async function generateToken(admin: string) {
     randomBytes(132, (err, byte) => {
         const token:string = byte.toString('hex')
-        setToken(admin, token)
+        setTokenToCloud(admin, token)
+        setTokenToLocal(token)
     })
 }
 
-async function setToken(
+async function setTokenToCloud(
     admin: string,
     token: string
 ) {
     await addDoc(collection(getFirestore(), "token"), {
         admin, token
     });
-    console.log('done')
+}
+
+async function setTokenToLocal(token: string) {
+    let expires = ""
+    const date = new Date()
+    date.setTime(date.getTime() + 24*3600*1000)
+    expires = "; expires=" + date.toUTCString()
+    document.cookie = `token = ${token || ""} ${expires}; path=/`
 }
 
 const About = ({ config, handleCredential }: any) => {
