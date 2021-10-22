@@ -26,3 +26,14 @@ export const setTokenToLocal = (token: string) => {
     expires = "; expires=" + date.toUTCString()
     document.cookie = `token = ${token || ""} ${expires}; path=/`
 }
+
+export const getTokenValue = () => {
+    const cookieName = "token="
+    const cookies = document.cookie.split(';')
+    for(let i=0; i<cookies.length; i++) {
+        let data = cookies[i]
+        while (data.charAt(0) === ' ') data = data.substring(1, data.length)
+        if(data.indexOf(cookieName) === 0) return data.substring(cookieName.length, data.length) 
+    }
+    return null
+}
