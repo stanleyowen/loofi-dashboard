@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
-import { initializeApp } from 'firebase/app'
 import { Properties } from './lib/interfaces.component'
 import Auth from './components/auth.component'
 import AppLayout from './components/app.component'

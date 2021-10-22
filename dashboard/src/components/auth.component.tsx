@@ -1,34 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { getFirestore, addDoc, collection } from "firebase/firestore"
 import { initializeApp } from 'firebase/app'
+import { generateToken } from '../lib/functions.component'
 import { GoogleAuthProvider, getAuth, signInWithRedirect, getRedirectResult } from 'firebase/auth'
 import { Button } from '@mui/material'
-import { randomBytes } from 'crypto'
-
-async function generateToken(admin: string) {
-    randomBytes(132, (err, byte) => {
-        const token:string = byte.toString('hex')
-        setTokenToCloud(admin, token)
-        setTokenToLocal(token)
-    })
-}
-
-async function setTokenToCloud(
-    admin: string,
-    token: string
-) {
-    await addDoc(collection(getFirestore(), "token"), {
-        admin, token
-    });
-}
-
-async function setTokenToLocal(token: string) {
-    let expires = ""
-    const date = new Date()
-    date.setTime(date.getTime() + 24*3600*1000)
-    expires = "; expires=" + date.toUTCString()
-    document.cookie = `token = ${token || ""} ${expires}; path=/`
-}
 
 const About = ({ config, handleCredential }: any) => {
     useEffect(() => {
