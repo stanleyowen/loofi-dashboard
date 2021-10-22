@@ -59,13 +59,15 @@ export default function App() {
     window.localStorage.setItem('tab-session', a.value)
   }, [properties])
 
+  const handleCredential = useCallback(a => setStatus(a), [loggedIn])
+
   return (
     <Router>
       <Route path='/app' exact>
         <SideBar properties={properties} handleChange={handleChange} />
         <AppLayout properties={properties} handleChange={handleChange} config={properties} />
       </Route>
-      <Route path='/auth' component={() => <Auth config={config} />} />
+      <Route path='/auth' component={() => <Auth config={config} handleCredential={handleCredential} />} />
     </Router>
   )
 }
