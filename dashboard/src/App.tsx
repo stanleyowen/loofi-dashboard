@@ -80,7 +80,10 @@ export default function App() {
     window.localStorage.setItem('tab-session', a.value)
   }, [properties])
 
-  const handleCredential = useCallback(a => setAuth({ ...auth, [a.id]: a.target }), [auth])
+  const handleCredential = useCallback(a => {
+    if(a.id && a.target) setAuth({ ...auth, [a.id]: a.target })
+    else setAuth(a)
+  }, [auth])
 
   return (
     <Router>
