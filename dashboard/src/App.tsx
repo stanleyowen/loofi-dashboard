@@ -42,14 +42,17 @@ export default function App() {
       div.style.opacity = `${Math.random() * (0.075 - 0.025) + 0.025}`
       document.querySelector('.backdrop-overlay')?.appendChild(div)
     }
-
+    initializeApp(config)
     const token = getTokenValue()
     onSnapshot(
       query(collection(getFirestore(), "token"),
       where("token", "==", token)
     ), (tokens) => {
       tokens.forEach(data => {
-        if(data.data() && String(data.data()?.token) === token) handleCredential(true)
+        if(data.data() && String(data.data()?.token) === token) handleCredential({
+            isLoading: false,
+            loggedIn: true
+        })
       })
     })
   }, [])

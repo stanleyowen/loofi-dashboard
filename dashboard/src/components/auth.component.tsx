@@ -11,8 +11,11 @@ const About = ({ config, handleCredential }: any) => {
         .then((result) => {
             console.log(result)
             if(result && result.user.email === process.env.REACT_APP_ADMIN_EMAIL) {
-                // handleCredential(true)
                 generateToken(result.user.email)
+                handleCredential({
+                    isLoading: false,
+                    loggedIn: true
+                })
             }
         })
         .catch(err => console.log(err))

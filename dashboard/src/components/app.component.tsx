@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { getDatabase, ref, onValue } from 'firebase/database'
 import { getFirestore, collection, addDoc } from 'firebase/firestore'
 import { Alert, Slide, Snackbar, LinearProgress, SlideProps } from '@mui/material'
+import { initializeApp } from '@firebase/app'
 
 import Navbar from './navbar.component'
 import BaseLayout from './base.component'
@@ -26,6 +27,7 @@ const App = ({ properties, handleChange, config }: any) => {
     })
 
     useEffect(() => {
+        config ?? initializeApp(config)
         onValue(ref(getDatabase(), 'data-dev-dev/'), (snapshot) => {
             let rawData = snapshot.val(), index = rawData.length, randIndex // eslint-disable-line
             while(index !== 0) {
@@ -35,7 +37,9 @@ const App = ({ properties, handleChange, config }: any) => {
             }
             setData(rawData)
         })
-        
+    }, [config])
+
+    useEffect(() => {
         if(document.readyState === 'complete') {
             onValue(ref(getDatabase(), '.info/connected'), (snapshot) => {
                 function Transition(props: TransitionProps) {
