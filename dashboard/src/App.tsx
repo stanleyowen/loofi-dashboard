@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
+import { onSnapshot, query, where, getFirestore, collection } from 'firebase/firestore'
+import { getTokenValue } from './lib/functions.component'
 import { Properties } from './lib/interfaces.component'
 import Auth from './components/auth.component'
 import AppLayout from './components/app.component'
@@ -33,6 +35,16 @@ export default function App() {
       div.style.opacity = `${Math.random() * (0.075 - 0.025) + 0.025}`
       document.querySelector('.backdrop-overlay')?.appendChild(div)
     }
+
+    const token = getTokenValue()
+    onSnapshot(
+      query(collection(getFirestore(), "token"),
+      where("token", "==", token)
+    ), (tokens) => {
+      tokens.forEach(data => {
+        if(data.data() && String(data.data()?.token) === token) handleCredential(true)
+      })
+    })
   }, [])
 
   useEffect(() => {
