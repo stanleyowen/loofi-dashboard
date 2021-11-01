@@ -27,7 +27,7 @@ const App = ({ properties, handleChange, config }: any) => {
     })
 
     useEffect(() => {
-        config ?? initializeApp(config)
+        initializeApp(config)
         onValue(ref(getDatabase(), 'data-dev-dev/'), (snapshot) => {
             let rawData = snapshot.val(), index = rawData.length, randIndex // eslint-disable-line
             while(index !== 0) {
@@ -37,9 +37,7 @@ const App = ({ properties, handleChange, config }: any) => {
             }
             setData(rawData)
         })
-    }, [config])
 
-    useEffect(() => {
         if(document.readyState === 'complete') {
             onValue(ref(getDatabase(), '.info/connected'), (snapshot) => {
                 function Transition(props: TransitionProps) {

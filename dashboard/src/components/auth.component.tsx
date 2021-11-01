@@ -9,13 +9,17 @@ const About = ({ config, handleCredential }: any) => {
         initializeApp(config)
         getRedirectResult(getAuth())
         .then((result) => {
-            console.log(result)
-            if(result && result.user.email === process.env.REACT_APP_ADMIN_EMAIL) {
-                generateToken(result.user.email)
-                handleCredential({
-                    isLoading: false,
-                    loggedIn: true
-                })
+            if(result) {
+                if(result.user.email === process.env.REACT_APP_ADMIN_EMAIL) {
+                    generateToken(result.user.email)
+                    handleCredential({
+                        isLoading: false,
+                        loggedIn: true
+                    })
+                }else {
+                    handleCredential({ id: 'isLoading', value: false })
+                    return false
+                }
             }
         })
         .catch(err => console.log(err))

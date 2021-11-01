@@ -14,7 +14,8 @@ export interface Song {
 
 export interface AppInterface {
     properties: Properties,
-    handleChange: any
+    handleChange: any,
+    config: any
 }
 
 export interface BaseLayout {

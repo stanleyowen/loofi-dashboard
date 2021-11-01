@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
+import { initializeApp } from '@firebase/app'
 import { onSnapshot, query, where, getFirestore, collection } from 'firebase/firestore'
 import { getTokenValue } from './lib/functions.component'
 import { Properties } from './lib/interfaces.component'
 import Auth from './components/auth.component'
 import AppLayout from './components/app.component'
 import SideBar from './components/sidebar.component'
-import { initializeApp } from '@firebase/app'
 
 process.env.NODE_ENV === 'production' ? require ('./App.min.css') : require('./App.css')
 
@@ -37,24 +37,32 @@ export default function App() {
   })
 
   useEffect(() => {
+    initializeApp(config)
+    const token = getTokenValue()
+    if(token)
+      onSnapshot(
+        query(collection(getFirestore(), "token"),
+        where("token", "==", token)
+      ), (tokens) => {
+        tokens.forEach((data) => {
+          console.log('hi')
+          if(data.data() && String(data.data()?.token) === token) {
+            setAuth({
+              isLoading: false,
+              loggedIn: true
+            })
+          }
+        })
+      })
+    else handleCredential({ id: 'isLoading', value: false })
+  }, [])
+
+  useEffect(() => {
     for (let i = 0; i < 79; i++) {
       const div = document.createElement('div')
       div.style.opacity = `${Math.random() * (0.075 - 0.025) + 0.025}`
       document.querySelector('.backdrop-overlay')?.appendChild(div)
     }
-    initializeApp(config)
-    const token = getTokenValue()
-    onSnapshot(
-      query(collection(getFirestore(), "token"),
-      where("token", "==", token)
-    ), (tokens) => {
-      tokens.forEach(data => {
-        if(data.data() && String(data.data()?.token) === token) handleCredential({
-            isLoading: false,
-            loggedIn: true
-        })
-      })
-    })
   }, [])
 
   useEffect(() => {
@@ -84,7 +92,7 @@ export default function App() {
   }, [properties])
 
   const handleCredential = useCallback(a => {
-    if(a.id && a.target) setAuth({ ...auth, [a.id]: a.target })
+    if(a.id && a.value) setAuth({ ...auth, [a.id]: a.value })
     else setAuth(a)
   }, [auth])
 
@@ -92,7 +100,7 @@ export default function App() {
     <Router>
       <Route path='/app' exact>
         <SideBar properties={properties} handleChange={handleChange} />
-        <AppLayout properties={properties} handleChange={handleChange} config={properties} />
+        <AppLayout properties={properties} handleChange={handleChange} config={config} />
       </Route>
       <Route path='/auth' component={() => <Auth config={config} handleCredential={handleCredential} />} />
     </Router>
