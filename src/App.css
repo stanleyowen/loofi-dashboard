@@ -17,6 +17,7 @@ body {
 h1, h2, h3, h4, h5, h6, p {
 	margin: 0;
 	padding: 0;
+	font-weight: normal;
 }
 
 /* App Background */
@@ -86,6 +87,18 @@ h1, h2, h3, h4, h5, h6, p {
 	background: -webkit-gradient(linear, left bottom, left top, from(rgba(239, 239, 239, 0.3)), to(rgba(239, 239, 239, 0.3))), rgba(239, 239, 239, 0.95) url('https://user-images.githubusercontent.com/69080584/135238252-5fd29825-32dc-4035-bd75-98eabc473ac4.png') center/196px repeat;
 }
 
+/* Auth */
+.container {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	width: 50%;
+	transition: all .5s;
+}
+.bg-white { background: rgb(var(--white) / 40%) }
+
 /* Sidebar */
 .sidebar {
 	width: 225px;
@@ -102,8 +115,9 @@ h1, h2, h3, h4, h5, h6, p {
 	flex-direction: column;
 }
 #tabs .active { background: rgb(var(--blue) / 15%) }
-#tabs .tab:not(#settings).active svg { animation: zoomIn .3s }
-#tabs #settings.active svg {
+.tab:not(#settings).active svg,
+.tab:not(#settings) .Mui-selected svg { animation: zoomIn .3s !important }
+#settings.active svg {
 	transition: all .5s !important;
 	transform: rotate(360deg);
 }
@@ -336,6 +350,24 @@ button {
 #settings .MuiBox-root { padding: 0px !important }
 #settings .active { background-color: rgb(var(--blue) / 35%) }
 #settings svg { font-size: 1.5em }
+#settings .flex .w-50.m-10 { width: calc(50% - 60px) !important }
+#settings .flex .w-50.m-10:nth-child(odd) { margin: 5px 10px 5px 50px !important }
+#settings .flex .w-50.m-10:nth-child(even) { margin: 5px 50px 5px 10px !important }
+#resources p { font-size: 14.5px }
+.copy-btn {
+	position: absolute !important;
+	right: 10px;
+	z-index: 100;
+}
+
+/* Download */
+#download .large-card svg {
+	display: block;
+	margin: 10px auto;
+	transition: 0.3s all;
+	color: rgb(var(--black) / 70%);
+}
+#download .large-card:hover svg { color: rgb(var(--black)); }
 
 /* Search */
 .search { width: 50% }
@@ -374,6 +406,9 @@ button {
 	.col-4 { grid-template-columns: 50% 50% }
 	#version .w-50 { width: 90% !important }
 	.w-50.audio { width: 100% !important }
+	#settings .flex .w-50.m-10 { width: 100% !important }
+	#settings .flex .w-50.m-10:nth-child(odd),
+	#settings .flex .w-50.m-10:nth-child(even) { margin: 5px 10px !important }
 }
 @media only screen and (max-width: 700px) {
 	.search { width: 100% }

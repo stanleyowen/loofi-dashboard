@@ -23,8 +23,8 @@ const Controls = ({ song, songData, handleSong }: any) => {
     const [property, setProperty] = useState<Property>({
         duration: 0,
         progress: 0,
-        volume: localStorage.getItem('volume') ? Number(localStorage.getItem('volume')) : 50,
-        muted: localStorage.getItem('muted') ? JSON.parse(String(localStorage.getItem('muted'))) : false
+        volume: Number(localStorage.getItem('volume')) ?? 50,
+        muted: JSON.parse(String(localStorage.getItem('muted')) ?? false)
     })
     const handleQueue = (a: string, b: any) => setQueue({...queue, [a]: b})
     const handleChange = (a: string, b: any) => setProperty({...property, [a]: b})
@@ -66,15 +66,23 @@ const Controls = ({ song, songData, handleSong }: any) => {
         return `${(minutes < 10 ? `0${minutes}` : minutes)}:${(second < 10 ? `0${second}` : second)}`
     }
 
+    const triggerDuration = (time: number | number[]) => {
+        handleSong({ id: 'playing', value: false })
+        song.audio.currentTime = Number(time)/100 * property.duration
+        handleChange('progress', Number(time)/100 * property.duration)
+        document.getElementById('current-duration')!.innerText = parseTime(song.audio.currentTime)
+        handleSong({ id: 'playing', value: true })
+    }
+
     song.audio.onloadeddata = () => handleChange('duration', song.audio.duration)
     song.audio.ontimeupdate = () => {
         handleChange('progress', (song.audio.currentTime / song.audio.duration) * 100)
         document.getElementById('current-duration')!.innerText = parseTime(song.audio.currentTime)
     }
-
+    
     const triggerAudio = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
-        handleSong({id: 'playing', value: !song.playing});
+        handleSong({ id: 'playing', value: !song.playing });
         (e.target as Element).classList.toggle('pause')
     }
 
@@ -102,14 +110,24 @@ const Controls = ({ song, songData, handleSong }: any) => {
                 </div>
                 <div className="playback-bar">
                     <div className="progress-time center-align" id="current-duration">00:00</div>
-                    <Slider className="mrl-5" size="small" defaultValue={property.volume} value={property.progress} disableSwap={true} />
+                    <Slider className="mrl-5" size="small" defaultValue={property.volume} value={property.progress} onChange={(_, value) => triggerDuration(value)} />
                     <div className="progress-time center-align">{parseTime(property.duration ? property.duration : 0)}</div>
                 </div>
             </div>
+
             <div className="w-30 flex center-flex">
                 <div className="w-50 audio">
-                    <button onClick={() => handleChange('muted', !property.muted)}>{property.muted || property.volume === 0 ? MutedAudio() : Audio()}</button>
-                    <Slider className="m-10" size="small" defaultValue={property.volume} value={property.volume} onChange={(_, value) => handleChange('volume', value)} />
+                    <button onClick={() => handleChange('muted', !property.muted)}>
+                        {property.muted || property.volume === 0 ? MutedAudio() : Audio()}
+                    </button>
+                    <Slider
+                        size="small"
+                        className="m-10"
+                        valueLabelDisplay="auto"
+                        value={property.volume}
+                        defaultValue={property.volume}
+                        onChange={(_, value) => handleChange('volume', value)}
+                    />
                 </div>
             </div>
         </div>

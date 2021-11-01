@@ -1,11 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import { Skeleton } from '@mui/material'
 
+interface Song {
+    title: string,
+    author: string,
+    image: string,
+    playing: boolean,
+    audio: HTMLAudioElement
+}
 interface Music {
     title: string,
     author: string,
     image: string,
     audio: HTMLAudioElement
+}
+
+interface Data {
+    song: any,
+    songData: Array<any>,
+    handleSong: any
 }
 
 const Home = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {

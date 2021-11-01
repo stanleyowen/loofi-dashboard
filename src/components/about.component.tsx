@@ -1,10 +1,20 @@
 import React, { useState } from 'react'
 import { Button, Tooltip, Accordion, AccordionSummary } from '@mui/material'
-
 import { version } from '../../package.json'
-import { License, About as AboutIcon, PrivacyPolicy, Expand, CopyToClipboard as CopyToClipboardIcon, Checkmark, Warning } from '../lib/icons.component'
+import {
+    Expand,
+    Warning,
+    License,
+    Feedback,
+    Resources,
+    Checkmark,
+    Changelog,
+    AboutOutline,
+    Contributors,
+    PrivacyPolicy,
+    CopyToClipboard as CopyToClipboardIcon
+} from '../lib/icons.component'
 
-// eslint-disable-next-line
 const About = () => {
     const [copiedToClipboard, setCopiedToClipboard] = useState<boolean | string>(false)
 
@@ -27,7 +37,7 @@ const About = () => {
         <div className="m-10" id="version">
             <div className="flex w-100 card p-15">
                 <div className="flex w-80">
-                    <AboutIcon />
+                    <AboutOutline />
                     <div className="ml-10">
                         <p>LoFi Player</p>
                         <p className="small">Version: {version}</p>
@@ -62,6 +72,47 @@ const About = () => {
 
             <Accordion className="w-100 card mt-10">
                 <AccordionSummary expandIcon={<Expand />}>
+                    <div className="flex w-80 no-capitalization">
+                        <Resources />
+                        <p className="ml-10">Helpful Resources</p>
+                    </div>
+                </AccordionSummary>
+                <div className="flex w-100" id="resources">
+                    <div className="w-50 m-10">
+                        <Button
+                            className="p-15 w-100 no-capitalization"
+                            onClick={() => window.open('https://github.com/stanleyowen/lofi-player/issues/new/choose')}
+                        >
+                            <Feedback />
+                            <p className="ml-10">Submit Feedback</p>
+                            <span className="m-auto"></span>
+                        </Button>
+                    </div>
+                    <div className="w-50 m-10">
+                        <Button
+                            className="p-15 w-100 no-capitalization"
+                            onClick={() => window.open('https://github.com/stanleyowen/lofi-player/releases')}
+                        >
+                            <Changelog />
+                            <p className="ml-10">Change Log</p>
+                            <span className="m-auto"></span>
+                        </Button>
+                    </div>
+                    <div className="w-50 m-10">
+                        <Button
+                            className="p-15 w-100 no-capitalization"
+                            onClick={() => window.open('https://github.com/stanleyowen/lofi-player/graphs/contributors')}
+                        >
+                            <Contributors />
+                            <p className="ml-10">Contributors</p>
+                            <span className="m-auto"></span>
+                        </Button>
+                    </div>
+                </div>
+            </Accordion>
+
+            <Accordion className="w-100 card mt-10">
+                <AccordionSummary expandIcon={<Expand />}>
                     <div className="flex w-80">
                         <PrivacyPolicy />
                         <p className="ml-10">Privacy Policy</p>
@@ -71,7 +122,7 @@ const About = () => {
                     <p><i>Personal Information Collection</i></p>
                     <p>LoFi Player does not collect, store, share or publish any personal information.</p>
                     <p className="mt-10"><i>Non-Personal Information Collection</i></p>
-                    <p>LoFi Player does not collect, store, share or publish any non-personal information.</p>
+                    <p>LoFi Player collects and stores data which are useful for logging, bugs, and fix crashes. All information sent is anonymous and free of any user or contextual data.</p>
                 </div>
             </Accordion>
             
