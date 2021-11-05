@@ -19,5 +19,5 @@ dist
 docs
 node_modules
 dist
-*.min.map
+*.css.map
 *.css

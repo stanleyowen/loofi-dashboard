@@ -28,7 +28,7 @@ const App = ({ properties, handleChange, config }: any) => {
 
     useEffect(() => {
         initializeApp(config)
-        onValue(ref(getDatabase(), 'data-dev-dev/'), (snapshot) => {
+        onValue(ref(getDatabase(), 'loofi-music/'), (snapshot) => {
             let rawData = snapshot.val(), index = rawData.length, randIndex // eslint-disable-line
             while(index !== 0) {
                 randIndex = Math.floor(Math.random() * index)
