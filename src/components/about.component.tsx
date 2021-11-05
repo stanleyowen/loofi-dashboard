@@ -39,7 +39,7 @@ const About = () => {
                 <div className="flex w-80">
                     <AboutOutline />
                     <div className="ml-10">
-                        <p>LoFi Player</p>
+                        <p>Loofi Dashboard</p>
                         <p className="small">Version: {version}</p>
                     </div>
                 </div>
@@ -81,7 +81,7 @@ const About = () => {
                     <div className="w-50 m-10">
                         <Button
                             className="p-15 w-100 no-capitalization"
-                            onClick={() => window.open('https://github.com/stanleyowen/lofi-player/issues/new/choose')}
+                            onClick={() => window.open('https://github.com/stanleyowen/loofi-dashboard/issues/new/choose')}
                         >
                             <Feedback />
                             <p className="ml-10">Submit Feedback</p>
@@ -91,7 +91,7 @@ const About = () => {
                     <div className="w-50 m-10">
                         <Button
                             className="p-15 w-100 no-capitalization"
-                            onClick={() => window.open('https://github.com/stanleyowen/lofi-player/releases')}
+                            onClick={() => window.open('https://github.com/stanleyowen/loofi-dashboard/releases')}
                         >
                             <Changelog />
                             <p className="ml-10">Change Log</p>
@@ -101,7 +101,7 @@ const About = () => {
                     <div className="w-50 m-10">
                         <Button
                             className="p-15 w-100 no-capitalization"
-                            onClick={() => window.open('https://github.com/stanleyowen/lofi-player/graphs/contributors')}
+                            onClick={() => window.open('https://github.com/stanleyowen/loofi-dashboard/graphs/contributors')}
                         >
                             <Contributors />
                             <p className="ml-10">Contributors</p>
@@ -120,9 +120,9 @@ const About = () => {
                 </AccordionSummary>
                 <div className="p-10">
                     <p><i>Personal Information Collection</i></p>
-                    <p>LoFi Player does not collect, store, share or publish any personal information.</p>
+                    <p>Loofi Dashboard collects and stores information to provide our services..</p>
                     <p className="mt-10"><i>Non-Personal Information Collection</i></p>
-                    <p>LoFi Player collects and stores data which are useful for logging, bugs, and fix crashes. All information sent is anonymous and free of any user or contextual data.</p>
+                    <p>Loofi Dashboard collects and stores data which are useful for logging, bugs, and fix crashes. All information sent is anonymous and free of any user or contextual data.</p>
                 </div>
             </Accordion>
             
@@ -134,9 +134,9 @@ const About = () => {
                     </div>
                 </AccordionSummary>
                 <div className="p-10">
-                    <p>LoFi Player is an open source project published under the MIT License. You can view the source code and contribute to this project on <a href="https://github.com/stanleyowen/lofi-player" target="_blank" rel="noreferrer">GitHub</a>.</p>
+                    <p>Loofi Dashboard is an open source project published under the MIT License. You can view the source code and contribute to this project on <a href="https://github.com/stanleyowen/loofi-dashboard" target="_blank" rel="noreferrer">GitHub</a>.</p>
                     <code>
-                        <p className="mt-10"><b>Copyright (c) 2021 LoFi Player</b></p>
+                        <p className="mt-10"><b>Copyright (c) 2021 Loofi Dashboard</b></p>
                         <p className="mt-10">Permission is hereby granted, free of charge, to any person obtaining a copy
                         of this software and associated documentation files (the &quot;Software&quot;), to deal
                         in the Software without restriction, including without limitation the rights
