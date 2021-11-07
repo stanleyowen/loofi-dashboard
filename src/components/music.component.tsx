@@ -6,6 +6,7 @@ import {
     TableRow,
     TableCell,
     TableBody,
+    TablePagination,
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
@@ -78,6 +79,20 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <TablePagination
+                className="card"
+                component="div"
+                count={songData.length}
+                rowsPerPage={rowPerPage}
+                page={page}
+                onPageChange={(_, newPage) => {
+                    setPage(newPage);
+                }}
+                onRowsPerPageChange={(e) => {
+                    setPage(0);
+                    setRowPerPage(+e.target.value);
+                }}
+            />
         </div>
     );
 };
