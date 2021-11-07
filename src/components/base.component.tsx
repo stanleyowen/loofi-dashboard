@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Home from './home.component'
-import Search from './search.component'
+import Music from './music.component'
 import Settings from './settings.component'
 import Download from './download.component'
 
@@ -11,8 +11,8 @@ const BaseLayout = ({ song, properties, songData, handleSong, HOST_DOMAIN }: any
         <div className="base">
             { properties.activeTab === 'home' ?
                 <Home properties={properties} handleSong={handleSong} song={song} songData={songData} HOST_DOMAIN={HOST_DOMAIN} /> :
-                properties.activeTab === 'search' ?
-                    <Search properties={properties} handleSong={handleSong} songData={songData} HOST_DOMAIN={HOST_DOMAIN} /> :
+                properties.activeTab === 'music' ?
+                    <Music properties={properties} handleSong={handleSong} songData={songData} HOST_DOMAIN={HOST_DOMAIN} /> :
                     properties.activeTab === 'download' ? <Download /> : <Settings /> }
         </div>
     )

@@ -40,11 +40,6 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
         else setGreeting('Evening')
     }, [])
 
-    useEffect(() => {
-        const btn = document.getElementById((song.title+song.author).replace(/\s/g, "-"))
-        song.playing ? btn?.classList.add('pause') : btn?.classList.remove('pause')
-    }, [song])
-
     function SkeletonPreview(count: number, type: 'large' | 'small') {
         const skeleton = []
         for (let i=0; i<count; i++) {
@@ -75,7 +70,7 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
 
     return (
         <div>
-            <h2 className="m-10">Good {greeting}</h2>
+            <h2 className="m-10">Music Component</h2>
             
         </div>
     )
