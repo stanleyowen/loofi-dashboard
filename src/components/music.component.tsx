@@ -1,20 +1,33 @@
-import React, { useState, useEffect } from 'react'
-
-interface Data {
-    song: any,
-    songData: Array<any>,
-    handleSong: any
-}
+import {
+    Table,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+} from '@mui/material';
+import React, { useState, useEffect } from 'react';
 
 const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
+    const columns = [
+        {
+            id: 'title',
+            label: 'Title',
+            minWidth: 170,
+        },
+        {
+            id: 'author',
+            label: 'Author',
+            minWidth: 100,
+        },
+    ];
     return (
         <div>
-            <h2 className="m-10">Music Component</h2>
             <div className="col-2">
                 <div className="m-10">
                     <div className="card p-10">
                         <h2 className="center-align">
-                            {songData.length === 0 ? '-' : songData.length }
+                            {songData.length === 0 ? '-' : songData.length}
                         </h2>
                         <p className="center-align">Musics</p>
                     </div>
@@ -26,8 +39,44 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
                     </div>
                 </div>
             </div>
-        </div>
-    )
-}
 
-export default Music
+            <div className="m-10">
+                <TableContainer>
+                    <Table stickyHeader className="card">
+                        <TableHead>
+                            <TableRow>
+                                {columns.map((column) => (
+                                    <TableCell
+                                        key={column.id}
+                                        align="left"
+                                        style={{ minWidth: column.minWidth }}
+                                    >
+                                        {column.label}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {songData.map((song: any, index: number) => {
+                                return (
+                                    <TableRow hover key={index}>
+                                        {columns.map((column) => {
+                                            console.log(song, song[column.id]);
+                                            return (
+                                                <TableCell key={column.id}>
+                                                    {song[column.id]}
+                                                </TableCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                );
+                            })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </div>
+        </div>
+    );
+};
+
+export default Music;
