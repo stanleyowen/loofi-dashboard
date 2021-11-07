@@ -1,4 +1,5 @@
 import {
+    Button,
     Table,
     TableContainer,
     TableHead,
@@ -22,59 +23,54 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
         },
     ];
     return (
-        <div>
-            <div className="col-2">
-                <div className="m-10">
-                    <div className="card p-10">
-                        <h2 className="center-align">
-                            {songData.length === 0 ? '-' : songData.length}
-                        </h2>
-                        <p className="center-align">Musics</p>
-                    </div>
+        <div className="m-10">
+            <div className="col-2 mb-10">
+                <div className="card p-10">
+                    <h2 className="center-align">
+                        {songData.length === 0 ? '-' : songData.length}
+                    </h2>
+                    <p className="center-align">Musics</p>
                 </div>
-                <div className="m-10">
-                    <div className="card p-10">
-                        <h2 className="center-align">-</h2>
-                        <p className="center-align">Musics</p>
-                    </div>
+                <div className="card p-10">
+                    <h2 className="center-align">-</h2>
+                    <p className="center-align">Musics</p>
                 </div>
             </div>
 
-            <div className="m-10">
-                <TableContainer>
-                    <Table stickyHeader className="card">
-                        <TableHead>
-                            <TableRow>
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align="left"
-                                        style={{ minWidth: column.minWidth }}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {songData.map((song: any, index: number) => {
-                                return (
-                                    <TableRow hover key={index}>
-                                        {columns.map((column) => {
-                                            console.log(song, song[column.id]);
-                                            return (
-                                                <TableCell key={column.id}>
-                                                    {song[column.id]}
-                                                </TableCell>
-                                            );
-                                        })}
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </div>
+            <Button variant="outlined">Add Music</Button>
+            <TableContainer>
+                <Table stickyHeader className="card">
+                    <TableHead>
+                        <TableRow>
+                            {columns.map((column) => (
+                                <TableCell
+                                    key={column.id}
+                                    align="left"
+                                    style={{ minWidth: column.minWidth }}
+                                >
+                                    {column.label}
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {songData.map((song: any, index: number) => {
+                            return (
+                                <TableRow hover key={index}>
+                                    {columns.map((column) => {
+                                        console.log(song, song[column.id]);
+                                        return (
+                                            <TableCell key={column.id}>
+                                                {song[column.id]}
+                                            </TableCell>
+                                        );
+                                    })}
+                                </TableRow>
+                            );
+                        })}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </div>
     );
 };
