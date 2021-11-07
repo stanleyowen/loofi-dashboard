@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Dialog, Tooltip, DialogActions, DialogContent, DialogContentText } from '@mui/material'
-import { Beta, Download, HomeSolid, HomeOutline, SettingsSolid, SettingsOutline, SearchSolid, SearchOutline } from '../lib/icons.component'
+import { Beta, Download, HomeSolid, HomeOutline, SettingsSolid, SettingsOutline, MusicSolid, MusicOutline } from '../lib/icons.component'
 
 // eslint-disable-next-line
 const SideBar = ({ handleChange, properties }: any) => {
@@ -22,8 +22,8 @@ const SideBar = ({ handleChange, properties }: any) => {
         <div className="sidebar">
             <div id="tabs">
                 {
-                    ['Home', 'Search', 'Download', 'Settings'].map((tab, index) => {
-                        const components: { [key: string]: any } = { Download, HomeSolid, HomeOutline, SearchSolid, SearchOutline, SettingsSolid, SettingsOutline }
+                    ['Home', 'Music', 'Download', 'Settings'].map((tab, index) => {
+                        const components: { [key: string]: any } = { Download, HomeSolid, HomeOutline, MusicSolid, MusicOutline, SettingsSolid, SettingsOutline }
                         const SolidIcon = components[`${tab}Solid`]
                         const OutlineIcon = components[`${tab}Outline`]
                         return (
