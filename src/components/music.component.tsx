@@ -21,7 +21,7 @@ interface Data {
     handleSong: any
 }
 
-const Home = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
+const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
     const [greeting, setGreeting] = useState<string>()
 
     const triggerAudio = (e: React.MouseEvent<HTMLButtonElement>, data: any) => {
@@ -81,4 +81,4 @@ const Home = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
     )
 }
 
-export default Home
+export default Music
