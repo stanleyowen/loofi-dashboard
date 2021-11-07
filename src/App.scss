@@ -337,6 +337,10 @@ button {
 	cursor: pointer;
 	background-color: transparent;
 }
+.col-2 {
+	display: grid;
+    grid-template-columns: 50% 50%;
+}
 .col-3 {
 	display: grid;
     grid-template-columns: 33.3% 33.3% 33.3%;
@@ -477,6 +481,7 @@ button {
     }
 }
 @media only screen and (max-width: 600px) {
+	.col-2 { grid-template-columns: 100% }
     .container {
         width: 90%;
     }

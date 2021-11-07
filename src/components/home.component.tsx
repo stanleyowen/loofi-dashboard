@@ -76,7 +76,6 @@ const Home = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
     return (
         <div>
             <h2 className="m-10">Good {greeting}</h2>
-            
         </div>
     )
 }
