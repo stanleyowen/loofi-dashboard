@@ -10,6 +10,8 @@ import {
 import React, { useState, useEffect } from 'react';
 
 const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
+    const [page, setPage] = useState<number>(0);
+    const [rowPerPage, setRowPerPage] = useState<number>(10);
     const columns = [
         {
             id: 'title',
@@ -54,20 +56,25 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {songData.map((song: any, index: number) => {
-                            return (
-                                <TableRow hover key={index}>
-                                    {columns.map((column) => {
-                                        console.log(song, song[column.id]);
-                                        return (
-                                            <TableCell key={column.id}>
-                                                {song[column.id]}
-                                            </TableCell>
-                                        );
-                                    })}
-                                </TableRow>
-                            );
-                        })}
+                        {songData
+                            .slice(
+                                page * rowPerPage,
+                                page * rowPerPage + rowPerPage
+                            )
+                            .map((song: any, index: number) => {
+                                return (
+                                    <TableRow hover key={index}>
+                                        {columns.map((column) => {
+                                            console.log(song, song[column.id]);
+                                            return (
+                                                <TableCell key={column.id}>
+                                                    {song[column.id]}
+                                                </TableCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                );
+                            })}
                     </TableBody>
                 </Table>
             </TableContainer>
