@@ -8,6 +8,10 @@ import {
     TableBody,
     TablePagination,
     LinearProgress,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
@@ -99,6 +103,21 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
                     setRowPerPage(+e.target.value);
                 }}
             />
+
+            <Dialog
+                fullWidth
+                open={musicDialogIsOpen}
+                onClose={() => setMusicDialogIsOpen(false)}
+            >
+                <DialogTitle>Add Music</DialogTitle>
+                <DialogContent>Add Music Dialog</DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setMusicDialogIsOpen(false)}>
+                        Cancel
+                    </Button>
+                    <Button>Add</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };
