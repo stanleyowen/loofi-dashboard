@@ -7,6 +7,7 @@ import {
     TableCell,
     TableBody,
     TablePagination,
+    LinearProgress,
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
@@ -57,25 +58,30 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {songData
-                            .slice(
-                                page * rowPerPage,
-                                page * rowPerPage + rowPerPage
-                            )
-                            .map((song: any, index: number) => {
-                                return (
-                                    <TableRow hover key={index}>
-                                        {columns.map((column) => {
-                                            console.log(song, song[column.id]);
-                                            return (
-                                                <TableCell key={column.id}>
-                                                    {song[column.id]}
-                                                </TableCell>
-                                            );
-                                        })}
-                                    </TableRow>
-                                );
-                            })}
+                        {songData.length > 0 ? (
+                            songData
+                                .slice(
+                                    page * rowPerPage,
+                                    page * rowPerPage + rowPerPage
+                                )
+                                .map((song: any, index: number) => {
+                                    return (
+                                        <TableRow hover key={index}>
+                                            {columns.map((column) => {
+                                                return (
+                                                    <TableCell key={column.id}>
+                                                        {song[column.id]}
+                                                    </TableCell>
+                                                );
+                                            })}
+                                        </TableRow>
+                                    );
+                                })
+                        ) : (
+                            <TableCell colSpan={2}>
+                                <LinearProgress />
+                            </TableCell>
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>
