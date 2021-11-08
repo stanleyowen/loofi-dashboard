@@ -135,7 +135,10 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
                                     fullWidth
                                     type="text"
                                     key={index}
-                                    label={data}
+                                    label={
+                                        Array.from(data)[0].toUpperCase() +
+                                        data.slice(1)
+                                    }
                                     margin="dense"
                                     variant="standard"
                                 />
