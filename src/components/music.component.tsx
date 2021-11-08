@@ -11,6 +11,7 @@ import {
     Dialog,
     DialogTitle,
     DialogContent,
+    TextField,
     DialogActions,
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
@@ -18,8 +19,17 @@ import React, { useState, useEffect } from 'react';
 const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
     const [page, setPage] = useState<number>(0);
     const [rowPerPage, setRowPerPage] = useState<number>(10);
-    const [addMusicDialogIsOpen, setAddaddMusicDialogIsOpen] =
-        useState<boolean>(false);
+    const [musicDialogIsOpen, setMusicDialogIsOpen] = useState<boolean>(false);
+    const [musicData, setMusicData] = useState<any>({
+        title: '',
+        author: '',
+        audio: '',
+        image: '',
+    });
+
+    const handleMusicData = (id: string, value: string) => {
+        setMusicData({ ...musicData, [id]: value });
+    };
 
     const columns = [
         {
@@ -117,7 +127,22 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
                 open={addMusicDialogIsOpen}
             >
                 <DialogTitle>Add Music</DialogTitle>
-                <DialogContent>Add Music Dialog</DialogContent>
+                <DialogContent>
+                    {Object.keys(musicData).map(
+                        (data: string, index: number) => {
+                            return (
+                                <TextField
+                                    fullWidth
+                                    type="text"
+                                    key={index}
+                                    label={data}
+                                    margin="dense"
+                                    variant="standard"
+                                />
+                            );
+                        }
+                    )}
+                </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setMusicDialogIsOpen(false)}>
                         Cancel
