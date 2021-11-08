@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { initializeApp } from '@firebase/app';
 import { getTokenValue } from './lib/functions.component';
 import { getAuth, onAuthStateChanged } from '@firebase/auth';
 import { onSnapshot, getFirestore, doc } from 'firebase/firestore';
 
-import SideBar from './components/sidebar.component'
+import SideBar from './components/sidebar.component';
 import Auth from './components/auth.component';
 import AppLayout from './components/app.component';
 
@@ -26,8 +26,8 @@ export default function App() {
     const [properties, setProperties] = useState<any>({
         action: 0,
         activeTab: window.localStorage.getItem('tab-session') ?? 'home',
-        history: [window.localStorage.getItem('tab-session') ?? 'home']
-    })
+        history: [window.localStorage.getItem('tab-session') ?? 'home'],
+    });
     const [auth, setAuth] = useState<{
         isLoading: boolean;
         loggedIn: boolean;
@@ -90,23 +90,32 @@ export default function App() {
         else setAuth(a);
     }, []);
 
-    const handleChange = useCallback(a => {
-        if(a.goForward || a.goBackward)
-          setProperties({
-            ...properties,
-            action: a.goBackward ? properties.action - 1 : properties.action + 1,
-            [a.id]: a.value
-          })
-        else {
-          properties.history.splice(properties.action+1, properties.history.length - (properties.action + 1) , a.value)
-          setProperties({
-            ...properties,
-            action: properties.action + 1,
-            [a.id]: a.value
-          })
-        }
-        window.localStorage.setItem('tab-session', a.value)
-    }, [properties])
+    const handleChange = useCallback(
+        (a) => {
+            if (a.goForward || a.goBackward)
+                setProperties({
+                    ...properties,
+                    action: a.goBackward
+                        ? properties.action - 1
+                        : properties.action + 1,
+                    [a.id]: a.value,
+                });
+            else {
+                properties.history.splice(
+                    properties.action + 1,
+                    properties.history.length - (properties.action + 1),
+                    a.value
+                );
+                setProperties({
+                    ...properties,
+                    action: properties.action + 1,
+                    [a.id]: a.value,
+                });
+            }
+            window.localStorage.setItem('tab-session', a.value);
+        },
+        [properties]
+    );
 
     return (
         <Router>
