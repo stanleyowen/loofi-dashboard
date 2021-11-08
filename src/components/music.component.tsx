@@ -141,6 +141,11 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
                                     }
                                     margin="dense"
                                     variant="standard"
+                                    autoFocus={index === 0}
+                                    value={musicData[data]}
+                                    onChange={(e) =>
+                                        handleMusicData(data, e.target.value)
+                                    }
                                 />
                             );
                         }
