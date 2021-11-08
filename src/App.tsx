@@ -110,13 +110,33 @@ export default function App() {
 
     return (
         <Router>
-            <Route path="/" exact>
-                <SideBar properties={properties} handleChange={handleChange} />
-                <AppLayout auth={auth} config={config} properties={properties} />
-            </Route>
-            <Route path="/auth">
-                <Auth config={config} handleCredential={handleCredential} />
-            </Route>
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <div>
+                            <SideBar
+                                properties={properties}
+                                handleChange={handleChange}
+                            />
+                            <AppLayout
+                                auth={auth}
+                                config={config}
+                                properties={properties}
+                            />
+                        </div>
+                    }
+                />
+                <Route
+                    path="/auth"
+                    element={
+                        <Auth
+                            config={config}
+                            handleCredential={handleCredential}
+                        />
+                    }
+                />
+            </Routes>
         </Router>
     );
 }
