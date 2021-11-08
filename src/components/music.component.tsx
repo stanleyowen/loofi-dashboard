@@ -18,6 +18,9 @@ import React, { useState, useEffect } from 'react';
 const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
     const [page, setPage] = useState<number>(0);
     const [rowPerPage, setRowPerPage] = useState<number>(10);
+    const [addMusicDialogIsOpen, setAddaddMusicDialogIsOpen] =
+        useState<boolean>(false);
+
     const columns = [
         {
             id: 'title',
@@ -45,7 +48,12 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
                 </div>
             </div>
 
-            <Button variant="outlined">Add Music</Button>
+            <Button
+                variant="outlined"
+                onClick={() => setAddaddMusicDialogIsOpen(true)}
+            >
+                Add Music
+            </Button>
             <TableContainer>
                 <Table stickyHeader className="card">
                     <TableHead>
@@ -106,8 +114,7 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
 
             <Dialog
                 fullWidth
-                open={musicDialogIsOpen}
-                onClose={() => setMusicDialogIsOpen(false)}
+                open={addMusicDialogIsOpen}
             >
                 <DialogTitle>Add Music</DialogTitle>
                 <DialogContent>Add Music Dialog</DialogContent>
