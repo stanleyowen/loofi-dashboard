@@ -1,3 +1,4 @@
+import { getDatabase, ref, set } from '@firebase/database';
 import {
     Button,
     Table,
@@ -31,6 +32,13 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
         setMusicData({ ...musicData, [id]: value });
     };
 
+    const AddMusic = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        set(
+            ref(getDatabase(), 'loofi-music/' + songData.length ?? 'null'),
+            musicData
+        );
+    };
     const columns = [
         {
             id: 'title',
@@ -43,6 +51,7 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
             minWidth: 100,
         },
     ];
+
     return (
         <div className="m-10">
             <div className="col-2 mb-10">
@@ -60,7 +69,7 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
 
             <Button
                 variant="outlined"
-                onClick={() => setAddaddMusicDialogIsOpen(true)}
+                onClick={() => setMusicDialogIsOpen(true)}
             >
                 Add Music
             </Button>
@@ -124,7 +133,8 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
 
             <Dialog
                 fullWidth
-                open={addMusicDialogIsOpen}
+                open={musicDialogIsOpen}
+                onClose={() => setMusicDialogIsOpen(false)}
             >
                 <DialogTitle>Add Music</DialogTitle>
                 <DialogContent>
@@ -155,7 +165,7 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
                     <Button onClick={() => setMusicDialogIsOpen(false)}>
                         Cancel
                     </Button>
-                    <Button>Add</Button>
+                    <Button onClick={AddMusic}>Add</Button>
                 </DialogActions>
             </Dialog>
         </div>
