@@ -20,6 +20,7 @@ import React, { useState, useEffect } from 'react';
 const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
     const [page, setPage] = useState<number>(0);
     const [rowPerPage, setRowPerPage] = useState<number>(10);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [musicDialogIsOpen, setMusicDialogIsOpen] = useState<boolean>(false);
     const [musicData, setMusicData] = useState<any>({
         title: '',
@@ -34,11 +35,22 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
 
     const AddMusic = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        setIsLoading(true);
         set(
             ref(getDatabase(), 'loofi-music/' + songData.length ?? 'null'),
             musicData
-        );
+        ).then(() => {
+            setIsLoading(false);
+            setMusicDialogIsOpen(false);
+            setMusicData({
+                title: '',
+                author: '',
+                audio: '',
+                image: '',
+            });
+        });
     };
+
     const columns = [
         {
             id: 'title',
@@ -165,7 +177,9 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
                     <Button onClick={() => setMusicDialogIsOpen(false)}>
                         Cancel
                     </Button>
-                    <Button onClick={AddMusic}>Add</Button>
+                    <Button onClick={AddMusic} disabled={isLoading}>
+                        Add
+                    </Button>
                 </DialogActions>
             </Dialog>
         </div>
