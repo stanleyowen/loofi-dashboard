@@ -1,5 +1,6 @@
 import { getDatabase, ref, set } from '@firebase/database';
 import {
+    Alert,
     Button,
     Table,
     TableContainer,
@@ -150,6 +151,9 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
             >
                 <DialogTitle>Add Music</DialogTitle>
                 <DialogContent>
+                    <Alert severity="error" className="w-100 border-box">
+                        Something went wrong. Please try again.
+                    </Alert>
                     {Object.keys(musicData).map(
                         (data: string, index: number) => {
                             return (
