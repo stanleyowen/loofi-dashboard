@@ -380,7 +380,7 @@ input:disabled {
     width: 80% !important;
 }
 .w-100 {
-    width: 100%;
+    width: 100% !important;
 }
 .p-0 {
     padding: 0px !important;
@@ -486,7 +486,9 @@ button {
     width: 75px;
     height: 75px;
 }
-
+.border-box {
+    box-sizing: border-box !important;
+}
 /* PlayBack Button */
 .play-btn {
     width: 18px;
@@ -647,6 +649,9 @@ button {
     #settings .flex .w-50.m-10:nth-child(even) {
         margin: 5px 10px !important;
     }
+    .MuiDialog-container .MuiAlert-root {
+        width: 100% !important;
+    }
 }
 @media only screen and (max-width: 700px) {
     .search {
@@ -665,11 +670,17 @@ button {
     .MuiAlert-root {
         width: 100vh !important;
     }
+    .MuiDialog-container .MuiAlert-root {
+        width: 100% !important;
+    }
 }
 
 @media only screen and (max-width: 700px) {
     .container {
         width: 80%;
+    }
+    .MuiDialog-container .MuiAlert-root {
+        width: 100% !important;
     }
 }
 @media only screen and (max-width: 600px) {
@@ -681,6 +692,9 @@ button {
     }
     .MuiAlert-root {
         width: 100vw !important;
+    }
+    .MuiDialog-container .MuiAlert-root {
+        width: 100% !important;
     }
     .MuiSnackbar-root {
         right: 8px !important;
