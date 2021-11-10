@@ -470,7 +470,7 @@ button {
 .col-2 {
     gap: 10px;
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 1fr 1fr;
 }
 .col-3 {
     display: grid;
