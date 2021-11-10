@@ -19,9 +19,15 @@ import {
 import React, { useState, useEffect } from 'react';
 
 const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
+    const [status, setStatus] = useState<{
+        isLoading: boolean;
+        isError: boolean;
+    }>({
+        isLoading: true,
+        isError: false,
+    });
     const [page, setPage] = useState<number>(0);
     const [rowPerPage, setRowPerPage] = useState<number>(10);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [musicDialogIsOpen, setMusicDialogIsOpen] = useState<boolean>(false);
     const [musicData, setMusicData] = useState<any>({
         title: '',
@@ -30,24 +36,33 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
         image: '',
     });
 
+    const handleStatus = (id: string, value: boolean) => {
+        setStatus({ ...status, [id]: value });
+    };
     const handleMusicData = (id: string, value: string) => {
         setMusicData({ ...musicData, [id]: value });
     };
 
     const AddMusic = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        setIsLoading(true);
+        handleStatus('isLoading', true);
         set(
             ref(getDatabase(), 'loofi-music/' + songData.length ?? 'null'),
             musicData
-        ).then(() => {
-            setIsLoading(false);
-            setMusicDialogIsOpen(false);
-            setMusicData({
-                title: '',
-                author: '',
-                audio: '',
-                image: '',
+        )
+            .then(() => {
+                handleStatus('isLoading', false);
+                setMusicDialogIsOpen(false);
+                setMusicData({
+                    title: '',
+                    author: '',
+                    audio: '',
+                    image: '',
+                });
+            })
+            .catch(() => {
+                handleStatus('isLoading', false);
+                handleStatus('isError', true);
             });
         });
     };
@@ -181,7 +196,7 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
                     <Button onClick={() => setMusicDialogIsOpen(false)}>
                         Cancel
                     </Button>
-                    <Button onClick={AddMusic} disabled={isLoading}>
+                    <Button onClick={AddMusic} disabled={status.isLoading}>
                         Add
                     </Button>
                 </DialogActions>
