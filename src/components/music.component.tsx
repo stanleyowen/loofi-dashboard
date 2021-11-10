@@ -64,7 +64,6 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
                 handleStatus('isLoading', false);
                 handleStatus('isError', true);
             });
-        });
     };
 
     const columns = [
@@ -166,9 +165,12 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
             >
                 <DialogTitle>Add Music</DialogTitle>
                 <DialogContent>
-                    <Alert severity="error" className="w-100 border-box">
-                        Something went wrong. Please try again.
-                    </Alert>
+                    {status.isError ? (
+                        <Alert severity="error" className="w-100 border-box">
+                            Something went wrong. Please try again.
+                        </Alert>
+                    ) : null}
+
                     {Object.keys(musicData).map(
                         (data: string, index: number) => {
                             return (
