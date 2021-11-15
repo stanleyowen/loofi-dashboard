@@ -30,11 +30,14 @@ const Music = ({ song, songData, rawSongData }: any) => {
     const [rowPerPage, setRowPerPage] = useState<number>(10);
     const [musicDialogIsOpen, setMusicDialogIsOpen] = useState<boolean>(false);
     const [musicData, setMusicData] = useState<any>({
-        title: '',
-        author: '',
         audio: '',
+        author: '',
         image: '',
-        isUpdate: true,
+        title: '',
+        properties: {
+            isUpdate: false,
+            id: null,
+        },
     });
 
     const handleStatus = (id: string, value: boolean) => {
@@ -47,7 +50,7 @@ const Music = ({ song, songData, rawSongData }: any) => {
     const AddMusic = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         handleStatus('isLoading', true);
-        if (musicData.isUpdate) {
+        if (musicData.properties.isUpdate) {
             update(ref(getDatabase()), {
                 'loofi-music/51': musicData,
             })
@@ -90,6 +93,17 @@ const Music = ({ song, songData, rawSongData }: any) => {
         }
     };
 
+    const UpdateMusic = (id: number, data: any) => {
+        setMusicDialogIsOpen(true);
+        setMusicData({
+            ...data,
+            properties: {
+                id,
+                isUpdate: true,
+            },
+        });
+    };
+
     const columns = [
         {
             id: 'title',
@@ -124,6 +138,7 @@ const Music = ({ song, songData, rawSongData }: any) => {
             >
                 Add Music
             </Button>
+
             <TableContainer>
                 <Table stickyHeader className="card">
                     <TableHead>
@@ -151,7 +166,9 @@ const Music = ({ song, songData, rawSongData }: any) => {
                                         <TableRow
                                             hover
                                             key={index}
-                                            onClick={() => console.log('hello')}
+                                            onClick={() =>
+                                                UpdateMusic(index, song)
+                                            }
                                         >
                                             {columns.map((column) => {
                                                 return (
