@@ -18,12 +18,12 @@ import {
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
-const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
+const Music = ({ song, songData, rawSongData }: any) => {
     const [status, setStatus] = useState<{
         isLoading: boolean;
         isError: boolean;
     }>({
-        isLoading: true,
+        isLoading: false,
         isError: false,
     });
     const [page, setPage] = useState<number>(0);
@@ -84,7 +84,7 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
             <div className="col-2 mb-10">
                 <div className="card p-10">
                     <h2 className="center-align">
-                        {songData.length === 0 ? '-' : songData.length}
+                        {rawSongData.length === 0 ? '-' : rawSongData.length}
                     </h2>
                     <p className="center-align">Musics</p>
                 </div>
@@ -116,8 +116,8 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {songData.length > 0 ? (
-                            songData
+                        {rawSongData.length > 0 ? (
+                            rawSongData
                                 .slice(
                                     page * rowPerPage,
                                     page * rowPerPage + rowPerPage
@@ -146,7 +146,7 @@ const Music = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
             <TablePagination
                 className="card"
                 component="div"
-                count={songData.length}
+                count={rawSongData.length}
                 rowsPerPage={rowPerPage}
                 page={page}
                 onPageChange={(_, newPage) => {
