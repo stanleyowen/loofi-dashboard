@@ -1,4 +1,4 @@
-import { getDatabase, ref, set } from '@firebase/database';
+import { getDatabase, ref, set, update } from '@firebase/database';
 import {
     Alert,
     Button,
@@ -34,6 +34,7 @@ const Music = ({ song, songData, rawSongData }: any) => {
         author: '',
         audio: '',
         image: '',
+        isUpdate: true,
     });
 
     const handleStatus = (id: string, value: boolean) => {
@@ -46,24 +47,47 @@ const Music = ({ song, songData, rawSongData }: any) => {
     const AddMusic = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         handleStatus('isLoading', true);
-        set(
-            ref(getDatabase(), 'loofi-music/' + songData.length ?? 'null'),
-            musicData
-        )
-            .then(() => {
-                handleStatus('isLoading', false);
-                setMusicDialogIsOpen(false);
-                setMusicData({
-                    title: '',
-                    author: '',
-                    audio: '',
-                    image: '',
-                });
+        if (musicData.isUpdate) {
+            update(ref(getDatabase()), {
+                'loofi-music/51': musicData,
             })
-            .catch(() => {
-                handleStatus('isLoading', false);
-                handleStatus('isError', true);
-            });
+                .then(() => {
+                    handleStatus('isLoading', false);
+                    setMusicDialogIsOpen(false);
+                    setMusicData({
+                        title: '',
+                        author: '',
+                        audio: '',
+                        image: '',
+                    });
+                })
+                .catch(() => {
+                    handleStatus('isLoading', false);
+                    handleStatus('isError', true);
+                });
+        } else {
+            set(
+                ref(
+                    getDatabase(),
+                    'loofi-music/' + rawSongData.length ?? 'null'
+                ),
+                musicData
+            )
+                .then(() => {
+                    handleStatus('isLoading', false);
+                    setMusicDialogIsOpen(false);
+                    setMusicData({
+                        title: '',
+                        author: '',
+                        audio: '',
+                        image: '',
+                    });
+                })
+                .catch(() => {
+                    handleStatus('isLoading', false);
+                    handleStatus('isError', true);
+                });
+        }
     };
 
     const columns = [
@@ -124,7 +148,11 @@ const Music = ({ song, songData, rawSongData }: any) => {
                                 )
                                 .map((song: any, index: number) => {
                                     return (
-                                        <TableRow hover key={index}>
+                                        <TableRow
+                                            hover
+                                            key={index}
+                                            onClick={() => console.log('hello')}
+                                        >
                                             {columns.map((column) => {
                                                 return (
                                                     <TableCell key={column.id}>
