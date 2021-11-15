@@ -1,4 +1,4 @@
-import { getDatabase, ref, set, update } from '@firebase/database';
+import { getDatabase, ref, set, remove, update } from '@firebase/database';
 import {
     Alert,
     Button,
@@ -113,6 +113,12 @@ const Music = ({ song, songData, rawSongData }: any) => {
                 isUpdate: true,
             },
         });
+    };
+
+    const DeleteMusic = () => {
+        setMusicDialogIsOpen(false);
+        const id = musicData.properties.id + page * rowPerPage;
+        remove(ref(getDatabase(), 'loofi-music/' + id));
     };
 
     const columns = [
@@ -262,6 +268,14 @@ const Music = ({ song, songData, rawSongData }: any) => {
                     <Button onClick={AddMusic} disabled={status.isLoading}>
                         Add
                     </Button>
+                    {musicData.properties?.isUpdate ? (
+                        <Button
+                            onClick={DeleteMusic}
+                            disabled={status.isLoading}
+                        >
+                            Delete
+                        </Button>
+                    ) : null}
                 </DialogActions>
             </Dialog>
         </div>
