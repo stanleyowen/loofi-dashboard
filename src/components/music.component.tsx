@@ -59,10 +59,15 @@ const Music = ({ song, songData, rawSongData }: any) => {
                     handleStatus('isLoading', false);
                     setMusicDialogIsOpen(false);
                     setMusicData({
-                        title: '',
-                        author: '',
                         audio: '',
+                        author: '',
                         image: '',
+                        title: '',
+                        properties: {
+                            isUpdate: false,
+                            isDelete: false,
+                            id: null,
+                        },
                     });
                 })
                 .catch(() => {
@@ -82,10 +87,15 @@ const Music = ({ song, songData, rawSongData }: any) => {
                     handleStatus('isLoading', false);
                     setMusicDialogIsOpen(false);
                     setMusicData({
-                        title: '',
-                        author: '',
                         audio: '',
+                        author: '',
                         image: '',
+                        title: '',
+                        properties: {
+                            isUpdate: false,
+                            isDelete: false,
+                            id: null,
+                        },
                     });
                 })
                 .catch(() => {
