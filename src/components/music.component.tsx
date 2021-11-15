@@ -51,6 +51,7 @@ const Music = ({ song, songData, rawSongData }: any) => {
         e.preventDefault();
         handleStatus('isLoading', true);
         if (musicData.properties.isUpdate) {
+            delete musicData.properties;
             update(ref(getDatabase()), {
                 'loofi-music/51': musicData,
             })
@@ -69,6 +70,7 @@ const Music = ({ song, songData, rawSongData }: any) => {
                     handleStatus('isError', true);
                 });
         } else {
+            delete musicData.properties;
             set(
                 ref(
                     getDatabase(),
