@@ -218,24 +218,29 @@ const Music = ({ song, songData, rawSongData }: any) => {
 
                     {Object.keys(musicData).map(
                         (data: string, index: number) => {
-                            return (
-                                <TextField
-                                    fullWidth
-                                    type="text"
-                                    key={index}
-                                    label={
-                                        Array.from(data)[0].toUpperCase() +
-                                        data.slice(1)
-                                    }
-                                    margin="dense"
-                                    variant="standard"
-                                    autoFocus={index === 0}
-                                    value={musicData[data]}
-                                    onChange={(e) =>
-                                        handleMusicData(data, e.target.value)
-                                    }
-                                />
-                            );
+                            if (data === 'properties') return null;
+                            else
+                                return (
+                                    <TextField
+                                        fullWidth
+                                        type="text"
+                                        key={index}
+                                        label={
+                                            Array.from(data)[0].toUpperCase() +
+                                            data.slice(1)
+                                        }
+                                        margin="dense"
+                                        variant="standard"
+                                        autoFocus={index === 0}
+                                        value={musicData[data]}
+                                        onChange={(e) =>
+                                            handleMusicData(
+                                                data,
+                                                e.target.value
+                                            )
+                                        }
+                                    />
+                                );
                         }
                     )}
                 </DialogContent>
