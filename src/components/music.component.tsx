@@ -51,9 +51,10 @@ const Music = ({ song, songData, rawSongData }: any) => {
         e.preventDefault();
         handleStatus('isLoading', true);
         if (musicData.properties.isUpdate) {
+            const { id } = musicData.properties;
             delete musicData.properties;
             update(ref(getDatabase()), {
-                'loofi-music/51': musicData,
+                ['loofi-music/' + id]: musicData,
             })
                 .then(() => {
                     handleStatus('isLoading', false);
