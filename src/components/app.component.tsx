@@ -111,19 +111,40 @@ const App = ({ properties, handleChange, config }: any) => {
 
     return (
         <div>
-            { data.length === 0 ? <LinearProgress /> : null }
-            <div className="app" style={ data.length === 0 ? { height: '99.3vh' } : {}}>
+            {data.length === 0 ? <LinearProgress /> : null}
+            <div
+                className="app"
+                style={data.length === 0 ? { height: '99.3vh' } : {}}
+            >
                 <div className="app-ui">
-                    <Navbar properties={properties} handleChange={handleChange} />
-                    <BaseLayout properties={properties} song={song} songData={data} handleSong={handleSong} HOST_DOMAIN={HOST_DOMAIN} />
+                    <Navbar
+                        properties={properties}
+                        handleChange={handleChange}
+                    />
+                    <BaseLayout
+                        properties={properties}
+                        song={song}
+                        songData={data}
+                        rawSongData={rawData}
+                        handleSong={handleSong}
+                        HOST_DOMAIN={HOST_DOMAIN}
+                    />
                 </div>
-                <Controls properties={properties} song={song} handleSong={handleSong} songData={data} HOST_DOMAIN={HOST_DOMAIN} />
+                <Controls
+                    properties={properties}
+                    song={song}
+                    handleSong={handleSong}
+                    songData={data}
+                    HOST_DOMAIN={HOST_DOMAIN}
+                />
                 <Snackbar open={isOffline} TransitionComponent={transition}>
-                    <Alert severity="error">You are offline. Some functionality may be unavailable.</Alert>
+                    <Alert severity="error">
+                        You are offline. Some functionality may be unavailable.
+                    </Alert>
                 </Snackbar>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default App;

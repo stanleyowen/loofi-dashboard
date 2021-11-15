@@ -1,21 +1,44 @@
-import React from 'react'
+import React from 'react';
 
-import Home from './home.component'
-import Music from './music.component'
-import Settings from './settings.component'
-import Download from './download.component'
+import Home from './home.component';
+import Music from './music.component';
+import Settings from './settings.component';
+import Download from './download.component';
 
 // eslint-disable-next-line
-const BaseLayout = ({ song, properties, songData, handleSong, HOST_DOMAIN }: any) => {
+const BaseLayout = ({
+    song,
+    properties,
+    songData,
+    handleSong,
+    HOST_DOMAIN,
+    rawSongData,
+}: any) => {
     return (
         <div className="base">
-            { properties.activeTab === 'home' ?
-                <Home properties={properties} handleSong={handleSong} song={song} songData={songData} HOST_DOMAIN={HOST_DOMAIN} /> :
-                properties.activeTab === 'music' ?
-                    <Music properties={properties} handleSong={handleSong} songData={songData} HOST_DOMAIN={HOST_DOMAIN} /> :
-                    properties.activeTab === 'download' ? <Download /> : <Settings /> }
+            {properties.activeTab === 'home' ? (
+                <Home
+                    properties={properties}
+                    handleSong={handleSong}
+                    song={song}
+                    songData={songData}
+                    HOST_DOMAIN={HOST_DOMAIN}
+                />
+            ) : properties.activeTab === 'music' ? (
+                <Music
+                    properties={properties}
+                    handleSong={handleSong}
+                    songData={songData}
+                    HOST_DOMAIN={HOST_DOMAIN}
+                    rawSongData={rawSongData}
+                />
+            ) : properties.activeTab === 'download' ? (
+                <Download />
+            ) : (
+                <Settings />
+            )}
         </div>
-    )
-}
+    );
+};
 
-export default BaseLayout
+export default BaseLayout;
