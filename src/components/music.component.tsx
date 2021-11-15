@@ -50,8 +50,8 @@ const Music = ({ song, songData, rawSongData }: any) => {
     const AddMusic = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         handleStatus('isLoading', true);
+        const id = musicData.properties.id + page * rowPerPage;
         if (musicData.properties.isUpdate) {
-            const { id } = musicData.properties;
             delete musicData.properties;
             update(ref(getDatabase()), {
                 ['loofi-music/' + id]: musicData,
@@ -66,7 +66,6 @@ const Music = ({ song, songData, rawSongData }: any) => {
                         title: '',
                         properties: {
                             isUpdate: false,
-                            isDelete: false,
                             id: null,
                         },
                     });
@@ -94,7 +93,6 @@ const Music = ({ song, songData, rawSongData }: any) => {
                         title: '',
                         properties: {
                             isUpdate: false,
-                            isDelete: false,
                             id: null,
                         },
                     });
