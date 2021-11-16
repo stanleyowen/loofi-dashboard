@@ -223,7 +223,19 @@ const Music = ({ song, songData, rawSongData }: any) => {
             <Dialog
                 fullWidth
                 open={musicDialogIsOpen}
-                onClose={() => setMusicDialogIsOpen(false)}
+                onClose={() => {
+                    setMusicData({
+                        audio: '',
+                        author: '',
+                        image: '',
+                        title: '',
+                        properties: {
+                            isUpdate: false,
+                            id: null,
+                        },
+                    });
+                    setMusicDialogIsOpen(false);
+                }}
             >
                 <DialogTitle>Add Music</DialogTitle>
                 <DialogContent>
