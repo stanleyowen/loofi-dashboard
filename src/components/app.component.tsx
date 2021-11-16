@@ -12,7 +12,6 @@ import { initializeApp } from '@firebase/app';
 
 import Navbar from './navbar.component';
 import BaseLayout from './base.component';
-import Controls from './controls.component';
 import { AppInterface, Song } from '../lib/interfaces.component';
 
 type TransitionProps = Omit<SlideProps, 'direction'>;
@@ -116,25 +115,13 @@ const App = ({ properties, handleChange, config }: any) => {
                 className="app"
                 style={data.length === 0 ? { height: '99.3vh' } : {}}
             >
-                <div className="app-ui">
-                    <Navbar
-                        properties={properties}
-                        handleChange={handleChange}
-                    />
-                    <BaseLayout
-                        properties={properties}
-                        song={song}
-                        songData={data}
-                        rawSongData={rawData}
-                        handleSong={handleSong}
-                        HOST_DOMAIN={HOST_DOMAIN}
-                    />
-                </div>
-                <Controls
+                <Navbar properties={properties} handleChange={handleChange} />
+                <BaseLayout
                     properties={properties}
                     song={song}
-                    handleSong={handleSong}
                     songData={data}
+                    rawSongData={rawData}
+                    handleSong={handleSong}
                     HOST_DOMAIN={HOST_DOMAIN}
                 />
                 <Snackbar open={isOffline} TransitionComponent={transition}>

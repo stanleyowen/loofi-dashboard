@@ -3,7 +3,6 @@ import React from 'react';
 import Home from './home.component';
 import Music from './music.component';
 import Settings from './settings.component';
-import Download from './download.component';
 
 // eslint-disable-next-line
 const BaseLayout = ({
@@ -32,8 +31,6 @@ const BaseLayout = ({
                     HOST_DOMAIN={HOST_DOMAIN}
                     rawSongData={rawSongData}
                 />
-            ) : properties.activeTab === 'download' ? (
-                <Download />
             ) : (
                 <Settings />
             )}
