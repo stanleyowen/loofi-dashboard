@@ -157,7 +157,7 @@ const Music = ({ song, songData, rawSongData }: any) => {
             </Button>
 
             <TableContainer>
-                <Table stickyHeader className="card">
+                <Table className="card">
                     <TableHead>
                         <TableRow>
                             {columns.map((column) => (
@@ -198,9 +198,11 @@ const Music = ({ song, songData, rawSongData }: any) => {
                                     );
                                 })
                         ) : (
-                            <TableCell colSpan={2}>
-                                <LinearProgress />
-                            </TableCell>
+                            <TableRow>
+                                <TableCell colSpan={2}>
+                                    <LinearProgress />
+                                </TableCell>
+                            </TableRow>
                         )}
                     </TableBody>
                 </Table>
