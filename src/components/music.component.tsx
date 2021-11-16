@@ -208,7 +208,7 @@ const Music = ({ song, songData, rawSongData }: any) => {
             <TablePagination
                 className="card"
                 component="div"
-                count={rawSongData.length}
+                count={rawSongData.length ?? 0}
                 rowsPerPage={rowPerPage}
                 page={page}
                 onPageChange={(_, newPage) => {
@@ -224,6 +224,7 @@ const Music = ({ song, songData, rawSongData }: any) => {
                 fullWidth
                 open={musicDialogIsOpen}
                 onClose={() => {
+                    setMusicDialogIsOpen(false);
                     setMusicData({
                         audio: '',
                         author: '',
@@ -234,7 +235,6 @@ const Music = ({ song, songData, rawSongData }: any) => {
                             id: null,
                         },
                     });
-                    setMusicDialogIsOpen(false);
                 }}
             >
                 <DialogTitle>Add Music</DialogTitle>
