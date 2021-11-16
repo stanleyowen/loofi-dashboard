@@ -117,12 +117,13 @@ const App = ({ properties, handleChange, config }: any) => {
             >
                 <Navbar properties={properties} handleChange={handleChange} />
                 <BaseLayout
-                    properties={properties}
                     song={song}
                     songData={data}
                     rawSongData={rawData}
                     handleSong={handleSong}
+                    properties={properties}
                     HOST_DOMAIN={HOST_DOMAIN}
+                    handleChange={handleChange}
                 />
                 <Snackbar open={isOffline} TransitionComponent={transition}>
                     <Alert severity="error">

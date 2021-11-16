@@ -1,49 +1,37 @@
-import React, { useState, useEffect } from 'react'
-import { Skeleton } from '@mui/material'
+import React, { useState, useEffect } from 'react';
+import { Skeleton } from '@mui/material';
+import { MusicOutline } from '../lib/icons.component';
 
-interface Song {
-    title: string,
-    author: string,
-    image: string,
-    playing: boolean,
-    audio: HTMLAudioElement
-}
-interface Music {
-    title: string,
-    author: string,
-    image: string,
-    audio: HTMLAudioElement
-}
+const Home = ({ song, properties, handleSong, handleChange }: any) => {
+    const [greeting, setGreeting] = useState<string>();
 
-interface Data {
-    song: any,
-    songData: Array<any>,
-    handleSong: any
-}
-
-const Home = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
-    const [greeting, setGreeting] = useState<string>()
-
-    const triggerAudio = (e: React.MouseEvent<HTMLButtonElement>, data: any) => {
-        e.preventDefault()
-        if(song.playing) {
-            handleSong({ id: 'playing', value: false })
-            setTimeout(() => handleSong(data), 10)
+    const triggerAudio = (
+        e: React.MouseEvent<HTMLButtonElement>,
+        data: any
+    ) => {
+        e.preventDefault();
+        if (song.playing) {
+            handleSong({ id: 'playing', value: false });
+            setTimeout(() => handleSong(data), 10);
         } else handleSong(data);
-        (e.target as Element).classList.toggle('pause')
-    }
+        (e.target as Element).classList.toggle('pause');
+    };
 
     useEffect(() => {
-        const currentHour = new Date().getHours()
-        if(currentHour < 12) setGreeting('Morning')
-        else if(currentHour < 18) setGreeting('Afternoon')
-        else setGreeting('Evening')
-    }, [])
+        const currentHour = new Date().getHours();
+        if (currentHour < 12) setGreeting('Morning');
+        else if (currentHour < 18) setGreeting('Afternoon');
+        else setGreeting('Evening');
+    }, []);
 
     useEffect(() => {
-        const btn = document.getElementById((song.title+song.author).replace(/\s/g, "-"))
-        song.playing ? btn?.classList.add('pause') : btn?.classList.remove('pause')
-    }, [song])
+        const btn = document.getElementById(
+            (song.title + song.author).replace(/\s/g, '-')
+        );
+        song.playing
+            ? btn?.classList.add('pause')
+            : btn?.classList.remove('pause');
+    }, [song]);
 
     function SkeletonPreview(count: number, type: 'large' | 'small') {
         const skeleton = []
@@ -80,4 +68,4 @@ const Home = ({ song, songData, handleSong, HOST_DOMAIN }: any) => {
     )
 }
 
-export default Home
+export default Home;

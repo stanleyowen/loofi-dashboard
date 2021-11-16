@@ -12,6 +12,7 @@ const BaseLayout = ({
     handleSong,
     HOST_DOMAIN,
     rawSongData,
+    handleChange,
 }: any) => {
     return (
         <div className="base">
@@ -22,6 +23,7 @@ const BaseLayout = ({
                     song={song}
                     songData={songData}
                     HOST_DOMAIN={HOST_DOMAIN}
+                    handleChange={handleChange}
                 />
             ) : properties.activeTab === 'music' ? (
                 <Music

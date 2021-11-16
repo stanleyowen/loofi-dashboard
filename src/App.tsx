@@ -132,6 +132,7 @@ export default function App() {
                                 auth={auth}
                                 config={config}
                                 properties={properties}
+                                handleChange={handleChange}
                             />
                         </div>
                     }
