@@ -207,6 +207,7 @@ const Music = ({ song, songData, rawSongData }: any) => {
                     </TableBody>
                 </Table>
             </TableContainer>
+
             <TablePagination
                 className="card"
                 component="div"
@@ -276,20 +277,21 @@ const Music = ({ song, songData, rawSongData }: any) => {
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setMusicDialogIsOpen(false)}>
-                        Cancel
-                    </Button>
-                    <Button onClick={AddMusic} disabled={status.isLoading}>
-                        Add
-                    </Button>
                     {musicData.properties?.isUpdate ? (
                         <Button
+                            color="error"
                             onClick={DeleteMusic}
                             disabled={status.isLoading}
                         >
                             Delete
                         </Button>
                     ) : null}
+                    <Button onClick={() => setMusicDialogIsOpen(false)}>
+                        Cancel
+                    </Button>
+                    <Button onClick={AddMusic} disabled={status.isLoading}>
+                        Add
+                    </Button>
                 </DialogActions>
             </Dialog>
         </div>
