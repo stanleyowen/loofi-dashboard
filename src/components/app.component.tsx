@@ -12,7 +12,6 @@ import { initializeApp } from '@firebase/app';
 
 import Navbar from './navbar.component';
 import BaseLayout from './base.component';
-import { AppInterface, Song } from '../lib/interfaces.component';
 
 type TransitionProps = Omit<SlideProps, 'direction'>;
 
