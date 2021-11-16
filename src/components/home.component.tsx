@@ -33,39 +33,33 @@ const Home = ({ song, properties, handleSong, handleChange }: any) => {
             : btn?.classList.remove('pause');
     }, [song]);
 
-    function SkeletonPreview(count: number, type: 'large' | 'small') {
-        const skeleton = []
-        for (let i=0; i<count; i++) {
-            skeleton.push(
-                type === 'small' ?
-                    (<div className="m-10" key={i}>
-                        <div className="card flex">
-                            <Skeleton variant="rectangular" width={75} height={75} animation="wave" />
-                            <p className="m-auto w-50">
-                                <Skeleton variant="text" animation="wave" width="50%" />
-                                <Skeleton variant="text" animation="wave" />
-                            </p>
-                        </div>
-                    </div>) :
-                    (<div className="m-10" key={i}>
-                        <div className="large-card">
-                            <Skeleton variant="circular" height={200} animation="wave" />
-                            <div className="flex">
-                                <span className="mt-10 w-70"><Skeleton variant="text" animation="wave" /></span>
-                                <span className="w-40"><Skeleton variant="text" animation="wave" /></span>
-                            </div>
-                        </div>
-                    </div>)
-            )
-        }
-        return skeleton
-    }
+    const switchTab = (target: string) => {
+        if (target !== properties.activeTab)
+            handleChange({ id: 'activeTab', value: target });
+    };
 
     return (
-        <div>
-            <h2 className="m-10">Good {greeting}</h2>
+        <div className="m-10">
+            <h2>Good {greeting}</h2>
+            <div className="col-3 mt-10">
+                <button
+                    className="card p-10"
+                    onClick={() => switchTab('music')}
+                >
+                    <h2 className="center-align">{MusicOutline()}</h2>
+                    <p className="center-align">Music</p>
+                </button>
+                <button className="card p-10">
+                    <h2 className="center-align">-</h2>
+                    <p className="center-align">Music</p>
+                </button>
+                <button className="card p-10">
+                    <h2 className="center-align">-</h2>
+                    <p className="center-align">Music</p>
+                </button>
+            </div>
         </div>
-    )
-}
+    );
+};
 
 export default Home;
