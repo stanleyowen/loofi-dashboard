@@ -141,11 +141,11 @@ const Music = ({ song, songData, rawSongData }: any) => {
                     <h2 className="center-align">
                         {rawSongData.length === 0 ? '-' : rawSongData.length}
                     </h2>
-                    <p className="center-align">Musics</p>
+                    <p className="center-align">Music</p>
                 </div>
                 <div className="card p-10">
                     <h2 className="center-align">-</h2>
-                    <p className="center-align">Musics</p>
+                    <p className="center-align">Music</p>
                 </div>
             </div>
 

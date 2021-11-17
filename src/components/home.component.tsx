@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Skeleton } from '@mui/material';
-import { MusicOutline } from '../lib/icons.component';
+import { MusicOutline, SettingsOutline } from '../lib/icons.component';
 
 const Home = ({ song, properties, handleSong, handleChange }: any) => {
     const [greeting, setGreeting] = useState<string>();
@@ -49,9 +49,12 @@ const Home = ({ song, properties, handleSong, handleChange }: any) => {
                     <h2 className="center-align">{MusicOutline()}</h2>
                     <p className="center-align">Music</p>
                 </button>
-                <button className="card p-10">
-                    <h2 className="center-align">-</h2>
-                    <p className="center-align">Music</p>
+                <button
+                    className="card p-10"
+                    onClick={() => switchTab('settings')}
+                >
+                    <h2 className="center-align">{SettingsOutline()}</h2>
+                    <p className="center-align">Settings</p>
                 </button>
                 <button className="card p-10">
                     <h2 className="center-align">-</h2>
