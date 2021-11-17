@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { initializeApp } from '@firebase/app';
 import { getTokenValue } from './lib/functions.component';
+import { LinearProgress, CircularProgress } from '@mui/material';
 import { getAuth, onAuthStateChanged } from '@firebase/auth';
 import { onSnapshot, getFirestore, doc } from 'firebase/firestore';
 
@@ -123,18 +124,35 @@ export default function App() {
                 <Route
                     path="/"
                     element={
-                        <div>
-                            <SideBar
-                                properties={properties}
-                                handleChange={handleChange}
-                            />
-                            <AppLayout
-                                auth={auth}
-                                config={config}
-                                properties={properties}
-                                handleChange={handleChange}
-                            />
-                        </div>
+                        auth.loggedIn ? (
+                            <div>
+                                <SideBar
+                                    properties={properties}
+                                    handleChange={handleChange}
+                                />
+                                <AppLayout
+                                    auth={auth}
+                                    config={config}
+                                    properties={properties}
+                                    handleChange={handleChange}
+                                />
+                            </div>
+                        ) : (
+                            <div>
+                                <LinearProgress />
+                                <div className="backdrop-overlay"></div>
+                                <div className="backdrop">
+                                    <div className="acrylic-material"></div>
+                                    <div
+                                        className="backdrop-image"
+                                        id="backdrop-image"
+                                    ></div>
+                                </div>
+                                <div className="bg-white container p-10 rounded-corner w-auto p-15">
+                                    <CircularProgress className="m-auto" />
+                                </div>
+                            </div>
+                        )
                     }
                 />
                 <Route
