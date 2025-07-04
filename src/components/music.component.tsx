@@ -61,6 +61,27 @@ const Music = ({ song, songData, rawSongData }: any) => {
         limit: 20,
     });
 
+    // Helper function to check for duplicates
+    const isDuplicate = (newMusic: { title: string; author: string }) => {
+        // Check if rawSongData exists and is an array
+        if (!rawSongData || !Array.isArray(rawSongData)) {
+            return false;
+        }
+
+        return rawSongData.some(
+            (existingMusic: any) =>
+                existingMusic?.title?.toLowerCase().trim() ===
+                    newMusic?.title?.toLowerCase().trim() &&
+                existingMusic?.author?.toLowerCase().trim() ===
+                    newMusic?.author?.toLowerCase().trim()
+        );
+    };
+
+    // Helper function to filter out duplicates from scraped music
+    const filterDuplicates = (scrapedTracks: ScrapedMusic[]) => {
+        return scrapedTracks.filter((track) => !isDuplicate(track));
+    };
+
     const handleScrapeMusic = async () => {
         if (tabValue === 1 && !scrapeUrl.trim()) return;
 
@@ -93,8 +114,19 @@ const Music = ({ song, songData, rawSongData }: any) => {
                 }
             }
 
-            setScrapedMusic(scrapedData);
+            // Filter out duplicates from scraped data
+            const uniqueScrapedData = filterDuplicates(scrapedData);
+            setScrapedMusic(uniqueScrapedData);
             setStatus({ ...status, isScraping: false, isError: false });
+
+            // Show notification if duplicates were found
+            if (scrapedData.length > uniqueScrapedData.length) {
+                console.log(
+                    `Found ${
+                        scrapedData.length - uniqueScrapedData.length
+                    } duplicate tracks that were filtered out.`
+                );
+            }
         } catch (error) {
             setStatus({ ...status, isScraping: false, isError: true });
         }
@@ -116,13 +148,27 @@ const Music = ({ song, songData, rawSongData }: any) => {
             (index) => scrapedMusic[index]
         );
 
+        // Double-check for duplicates before adding (in case data changed)
+        const uniqueSelectedItems = selectedItems.filter(
+            (music) => !isDuplicate(music)
+        );
+
+        if (uniqueSelectedItems.length !== selectedItems.length) {
+            console.log(
+                `${
+                    selectedItems.length - uniqueSelectedItems.length
+                } selected tracks were already in the database and will be skipped.`
+            );
+        }
+
         try {
-            for (const music of selectedItems) {
+            for (const music of uniqueSelectedItems) {
                 await set(
                     ref(
                         getDatabase(),
                         `loofi-music/${
-                            rawSongData.length + selectedItems.indexOf(music)
+                            rawSongData.length +
+                            uniqueSelectedItems.indexOf(music)
                         }`
                     ),
                     music
@@ -172,8 +218,16 @@ const Music = ({ song, songData, rawSongData }: any) => {
 
     const AddMusic = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+
+        // Check for duplicates in manual entry
+        if (!musicData.properties.isUpdate && isDuplicate(musicData)) {
+            setStatus({ ...status, isError: true });
+            return;
+        }
+
         handleStatus('isLoading', true);
         const id = musicData.properties.id + page * rowPerPage;
+
         if (musicData.properties.isUpdate) {
             delete musicData.properties;
             update(ref(getDatabase()), {
@@ -432,7 +486,10 @@ const Music = ({ song, songData, rawSongData }: any) => {
                 <DialogContent>
                     {status.isError ? (
                         <Alert severity="error" className="w-100 border-box">
-                            Something went wrong. Please try again.
+                            {!musicData.properties.isUpdate &&
+                            isDuplicate(musicData)
+                                ? 'This music already exists in your library. Please check the title and author.'
+                                : 'Something went wrong. Please try again.'}
                         </Alert>
                     ) : null}
 
@@ -605,9 +662,9 @@ const Music = ({ song, songData, rawSongData }: any) => {
                             {scrapedMusic.length > 0 && (
                                 <Box>
                                     <p>
-                                        Found {scrapedMusic.length} tracks from
-                                        Jamendo. Select the ones you want to
-                                        add:
+                                        Found {scrapedMusic.length} unique
+                                        tracks from Jamendo. Select the ones you
+                                        want to add:
                                     </p>
                                     <Box
                                         sx={{
@@ -699,7 +756,16 @@ const Music = ({ song, songData, rawSongData }: any) => {
                     ) : null}
                     <Button onClick={resetDialog}>Cancel</Button>
                     {tabValue === 0 ? (
-                        <Button onClick={AddMusic} disabled={status.isLoading}>
+                        <Button
+                            onClick={AddMusic}
+                            disabled={
+                                status.isLoading ||
+                                (!musicData.properties.isUpdate &&
+                                    isDuplicate(musicData) &&
+                                    musicData.title &&
+                                    musicData.author)
+                            }
+                        >
                             {musicData.properties?.isUpdate ? 'Update' : 'Add'}
                         </Button>
                     ) : (
