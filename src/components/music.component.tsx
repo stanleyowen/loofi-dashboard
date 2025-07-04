@@ -15,20 +15,35 @@ import {
     DialogContent,
     TextField,
     DialogActions,
+    Tabs,
+    Tab,
+    Box,
+    Chip,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
+import { MusicScraper, ScrapedMusic } from '../lib/scrapper.component';
 
 const Music = ({ song, songData, rawSongData }: any) => {
     const [status, setStatus] = useState<{
         isLoading: boolean;
         isError: boolean;
+        isScraping: boolean;
     }>({
         isLoading: false,
         isError: false,
+        isScraping: false,
     });
     const [page, setPage] = useState<number>(0);
     const [rowPerPage, setRowPerPage] = useState<number>(10);
     const [musicDialogIsOpen, setMusicDialogIsOpen] = useState<boolean>(false);
+    const [tabValue, setTabValue] = useState<number>(0);
+    const [scrapeUrl, setScrapeUrl] = useState<string>('');
+    const [scrapedMusic, setScrapedMusic] = useState<ScrapedMusic[]>([]);
+    const [selectedMusic, setSelectedMusic] = useState<Set<number>>(new Set());
     const [musicData, setMusicData] = useState<any>({
         audio: '',
         author: '',
@@ -39,6 +54,114 @@ const Music = ({ song, songData, rawSongData }: any) => {
             id: null,
         },
     });
+    const [jamendoOptions, setJamendoOptions] = useState({
+        method: 'popular',
+        tags: 'lofi,chill,ambient',
+        search: '',
+        limit: 20,
+    });
+
+    const handleScrapeMusic = async () => {
+        if (tabValue === 1 && !scrapeUrl.trim()) return;
+
+        setStatus({ ...status, isScraping: true });
+        try {
+            let scrapedData: ScrapedMusic[] = [];
+
+            if (tabValue === 1) {
+                // Web scraping
+                scrapedData = await MusicScraper.scrapeFromURL(scrapeUrl);
+            } else if (tabValue === 2) {
+                // Jamendo API
+                if (jamendoOptions.method === 'popular') {
+                    scrapedData = await MusicScraper.getLofiTracks(
+                        jamendoOptions.limit
+                    );
+                } else if (
+                    jamendoOptions.method === 'search' &&
+                    jamendoOptions.search.trim()
+                ) {
+                    scrapedData = await MusicScraper.searchJamendoTracks(
+                        jamendoOptions.search,
+                        jamendoOptions.limit
+                    );
+                } else if (jamendoOptions.method === 'tags') {
+                    scrapedData = await MusicScraper.scrapeFromJamendo({
+                        tags: jamendoOptions.tags,
+                        limit: jamendoOptions.limit,
+                    });
+                }
+            }
+
+            setScrapedMusic(scrapedData);
+            setStatus({ ...status, isScraping: false, isError: false });
+        } catch (error) {
+            setStatus({ ...status, isScraping: false, isError: true });
+        }
+    };
+
+    const handleSelectMusic = (index: number) => {
+        const newSelected = new Set(selectedMusic);
+        if (newSelected.has(index)) {
+            newSelected.delete(index);
+        } else {
+            newSelected.add(index);
+        }
+        setSelectedMusic(newSelected);
+    };
+
+    const handleAddSelectedMusic = async () => {
+        setStatus({ ...status, isLoading: true });
+        const selectedItems = Array.from(selectedMusic).map(
+            (index) => scrapedMusic[index]
+        );
+
+        try {
+            for (const music of selectedItems) {
+                await set(
+                    ref(
+                        getDatabase(),
+                        `loofi-music/${
+                            rawSongData.length + selectedItems.indexOf(music)
+                        }`
+                    ),
+                    music
+                );
+            }
+
+            setStatus({ ...status, isLoading: false });
+            setMusicDialogIsOpen(false);
+            setScrapedMusic([]);
+            setSelectedMusic(new Set());
+            setScrapeUrl('');
+        } catch (error) {
+            setStatus({ ...status, isLoading: false, isError: true });
+        }
+    };
+
+    const resetDialog = () => {
+        setMusicDialogIsOpen(false);
+        setTabValue(0);
+        setScrapeUrl('');
+        setScrapedMusic([]);
+        setSelectedMusic(new Set());
+        setJamendoOptions({
+            method: 'popular',
+            tags: 'lofi,chill,ambient',
+            search: '',
+            limit: 20,
+        });
+        setMusicData({
+            audio: '',
+            author: '',
+            image: '',
+            title: '',
+            properties: {
+                isUpdate: false,
+                id: null,
+            },
+        });
+    };
 
     const handleStatus = (id: string, value: boolean) => {
         setStatus({ ...status, [id]: value });
@@ -79,7 +202,7 @@ const Music = ({ song, songData, rawSongData }: any) => {
             set(
                 ref(
                     getDatabase(),
-                    'loofi-music/' + rawSongData.length ?? 'null'
+                    'loofi-music/' + (rawSongData.length ?? 'null')
                 ),
                 musicData
             )
@@ -292,6 +415,303 @@ const Music = ({ song, songData, rawSongData }: any) => {
                     <Button onClick={AddMusic} disabled={status.isLoading}>
                         Add
                     </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                fullWidth
+                maxWidth="md"
+                open={musicDialogIsOpen}
+                onClose={resetDialog}
+            >
+                <DialogTitle>
+                    {musicData.properties?.isUpdate
+                        ? 'Update Music'
+                        : 'Add Music'}
+                </DialogTitle>
+                <DialogContent>
+                    {status.isError ? (
+                        <Alert severity="error" className="w-100 border-box">
+                            Something went wrong. Please try again.
+                        </Alert>
+                    ) : null}
+
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <Tabs
+                            value={tabValue}
+                            onChange={(_, newValue) => setTabValue(newValue)}
+                        >
+                            <Tab label="Manual Entry" />
+                            <Tab label="Web Scraping" />
+                            <Tab label="Jamendo API" />
+                        </Tabs>
+                    </Box>
+
+                    {tabValue === 0 && (
+                        <Box sx={{ pt: 2 }}>
+                            {Object.keys(musicData).map(
+                                (data: string, index: number) => {
+                                    if (data === 'properties') return null;
+                                    return (
+                                        <TextField
+                                            fullWidth
+                                            type="text"
+                                            key={index}
+                                            label={
+                                                Array.from(
+                                                    data
+                                                )[0].toUpperCase() +
+                                                data.slice(1)
+                                            }
+                                            margin="dense"
+                                            variant="standard"
+                                            autoFocus={index === 0}
+                                            value={musicData[data]}
+                                            onChange={(e) =>
+                                                handleMusicData(
+                                                    data,
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                    );
+                                }
+                            )}
+                        </Box>
+                    )}
+
+                    {tabValue === 1 && (
+                        <Box sx={{ pt: 2 }}>
+                            <TextField
+                                fullWidth
+                                label="Website URL to scrape"
+                                value={scrapeUrl}
+                                onChange={(e) => setScrapeUrl(e.target.value)}
+                                placeholder="https://example-music-site.com"
+                                margin="dense"
+                            />
+                            <Button
+                                variant="outlined"
+                                onClick={handleScrapeMusic}
+                                disabled={
+                                    status.isScraping || !scrapeUrl.trim()
+                                }
+                                sx={{ mt: 2, mb: 2 }}
+                            >
+                                {status.isScraping
+                                    ? 'Scraping...'
+                                    : 'Scrape Music'}
+                            </Button>
+
+                            {scrapedMusic.length > 0 && (
+                                <Box>
+                                    <p>
+                                        Found {scrapedMusic.length} tracks.
+                                        Select the ones you want to add:
+                                    </p>
+                                    {/* ...existing music selection UI... */}
+                                </Box>
+                            )}
+                        </Box>
+                    )}
+
+                    {tabValue === 2 && (
+                        <Box sx={{ pt: 2 }}>
+                            <FormControl fullWidth margin="dense">
+                                <InputLabel>Method</InputLabel>
+                                <Select
+                                    value={jamendoOptions.method}
+                                    onChange={(e) =>
+                                        setJamendoOptions({
+                                            ...jamendoOptions,
+                                            method: e.target.value,
+                                        })
+                                    }
+                                >
+                                    <MenuItem value="popular">
+                                        Popular LoFi Tracks
+                                    </MenuItem>
+                                    <MenuItem value="search">
+                                        Search Tracks
+                                    </MenuItem>
+                                    <MenuItem value="tags">
+                                        Browse by Tags
+                                    </MenuItem>
+                                </Select>
+                            </FormControl>
+
+                            {jamendoOptions.method === 'search' && (
+                                <TextField
+                                    fullWidth
+                                    label="Search Query"
+                                    value={jamendoOptions.search}
+                                    onChange={(e) =>
+                                        setJamendoOptions({
+                                            ...jamendoOptions,
+                                            search: e.target.value,
+                                        })
+                                    }
+                                    placeholder="Enter artist name, song title, etc."
+                                    margin="dense"
+                                />
+                            )}
+
+                            {jamendoOptions.method === 'tags' && (
+                                <TextField
+                                    fullWidth
+                                    label="Tags (comma separated)"
+                                    value={jamendoOptions.tags}
+                                    onChange={(e) =>
+                                        setJamendoOptions({
+                                            ...jamendoOptions,
+                                            tags: e.target.value,
+                                        })
+                                    }
+                                    placeholder="lofi,chill,ambient,instrumental"
+                                    margin="dense"
+                                />
+                            )}
+
+                            <TextField
+                                fullWidth
+                                type="number"
+                                label="Number of tracks to fetch"
+                                value={jamendoOptions.limit}
+                                onChange={(e) =>
+                                    setJamendoOptions({
+                                        ...jamendoOptions,
+                                        limit: parseInt(e.target.value) || 20,
+                                    })
+                                }
+                                margin="dense"
+                                inputProps={{ min: 1, max: 50 }}
+                            />
+
+                            <Button
+                                variant="outlined"
+                                onClick={handleScrapeMusic}
+                                disabled={
+                                    status.isScraping ||
+                                    (jamendoOptions.method === 'search' &&
+                                        !jamendoOptions.search.trim())
+                                }
+                                sx={{ mt: 2, mb: 2 }}
+                            >
+                                {status.isScraping
+                                    ? 'Fetching...'
+                                    : 'Fetch from Jamendo'}
+                            </Button>
+
+                            {scrapedMusic.length > 0 && (
+                                <Box>
+                                    <p>
+                                        Found {scrapedMusic.length} tracks from
+                                        Jamendo. Select the ones you want to
+                                        add:
+                                    </p>
+                                    <Box
+                                        sx={{
+                                            maxHeight: 300,
+                                            overflow: 'auto',
+                                        }}
+                                    >
+                                        {scrapedMusic.map((music, index) => (
+                                            <Box
+                                                key={index}
+                                                sx={{
+                                                    p: 2,
+                                                    mb: 1,
+                                                    border: 1,
+                                                    borderColor:
+                                                        selectedMusic.has(index)
+                                                            ? 'primary.main'
+                                                            : 'grey.300',
+                                                    borderRadius: 1,
+                                                    cursor: 'pointer',
+                                                    backgroundColor:
+                                                        selectedMusic.has(index)
+                                                            ? 'primary.light'
+                                                            : 'transparent',
+                                                }}
+                                                onClick={() =>
+                                                    handleSelectMusic(index)
+                                                }
+                                            >
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '10px',
+                                                    }}
+                                                >
+                                                    {music.image && (
+                                                        <img
+                                                            src={music.image}
+                                                            alt={music.title}
+                                                            style={{
+                                                                width: 50,
+                                                                height: 50,
+                                                                borderRadius: 4,
+                                                            }}
+                                                        />
+                                                    )}
+                                                    <div>
+                                                        <div>
+                                                            <strong>
+                                                                {music.title}
+                                                            </strong>
+                                                        </div>
+                                                        <div
+                                                            style={{
+                                                                color: 'gray',
+                                                            }}
+                                                        >
+                                                            {music.author}
+                                                        </div>
+                                                    </div>
+                                                    {selectedMusic.has(
+                                                        index
+                                                    ) && (
+                                                        <Chip
+                                                            label="Selected"
+                                                            color="primary"
+                                                            size="small"
+                                                        />
+                                                    )}
+                                                </div>
+                                            </Box>
+                                        ))}
+                                    </Box>
+                                </Box>
+                            )}
+                        </Box>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    {musicData.properties?.isUpdate ? (
+                        <Button
+                            color="error"
+                            onClick={DeleteMusic}
+                            disabled={status.isLoading}
+                        >
+                            Delete
+                        </Button>
+                    ) : null}
+                    <Button onClick={resetDialog}>Cancel</Button>
+                    {tabValue === 0 ? (
+                        <Button onClick={AddMusic} disabled={status.isLoading}>
+                            {musicData.properties?.isUpdate ? 'Update' : 'Add'}
+                        </Button>
+                    ) : (
+                        <Button
+                            onClick={handleAddSelectedMusic}
+                            disabled={
+                                status.isLoading || selectedMusic.size === 0
+                            }
+                        >
+                            Add Selected ({selectedMusic.size})
+                        </Button>
+                    )}
                 </DialogActions>
             </Dialog>
         </div>
