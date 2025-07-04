@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Tooltip, Accordion, AccordionSummary } from '@mui/material';
-import { version } from '../../package.json';
+import packageJson from '../../package.json';
 import {
     Expand,
     Warning,
@@ -22,7 +22,7 @@ const About = () => {
 
     const CopyToClipboard = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        navigator.clipboard.writeText(`Version: ${version}`).then(
+        navigator.clipboard.writeText(`Version: ${packageJson.version}`).then(
             () =>
                 // Set copiedToClipboard to true
                 // If Text is Copied to Clipboard Successfully
@@ -42,7 +42,7 @@ const About = () => {
                     <AboutOutline />
                     <div className="ml-10">
                         <p>Loofi Dashboard</p>
-                        <p className="small">Version: {version}</p>
+                        <p className="small">Version: {packageJson.version}</p>
                     </div>
                 </div>
                 <Tooltip
