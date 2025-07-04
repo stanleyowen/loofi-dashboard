@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { initializeApp } from 'firebase/app';
 import { generateToken } from '../lib/functions.component';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import { Alert, Slide, Button, Snackbar, SlideProps } from '@mui/material';
 
 type TransitionProps = Omit<SlideProps, 'direction'>;
 
-const About = ({ config, handleCredential }: any) => {
-    initializeApp(config);
+const Auth = ({ handleCredential }: any) => {
     const whiteListedEmails: string[] | undefined =
         process.env.REACT_APP_WHITELISTED_EMAIL?.split(', ');
     const [status, setStatus] = useState<{
@@ -19,7 +17,7 @@ const About = ({ config, handleCredential }: any) => {
             | 'No Whitelisted Emails are Found.';
     }>({
         isError: false,
-        message: 'Invalid Credentials',
+        message: null,
     });
     const [transition, setTransition] = useState<
         React.ComponentType<TransitionProps> | undefined
@@ -56,6 +54,7 @@ const About = ({ config, handleCredential }: any) => {
                                 }
                                 setTransition(() => Transition);
                                 if (result) {
+                                    console.log(result);
                                     if (whiteListedEmails)
                                         whiteListedEmails.forEach(
                                             (email, index) => {
@@ -144,4 +143,4 @@ const About = ({ config, handleCredential }: any) => {
     );
 };
 
-export default About;
+export default Auth;

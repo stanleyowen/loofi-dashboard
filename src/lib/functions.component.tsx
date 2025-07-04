@@ -1,5 +1,4 @@
 import React from 'react';
-import { randomBytes } from 'crypto';
 import { getFirestore, setDoc, doc } from 'firebase/firestore';
 
 function setCookie(name: string, value: string) {
@@ -14,10 +13,13 @@ function setCookie(name: string, value: string) {
 }
 
 export const generateToken = (email: string) => {
-    randomBytes(132, (err, byte) => {
-        const token: string = byte.toString('hex');
-        setTokenToCloud(email, token);
-    });
+    // Use Web Crypto API instead of Node.js crypto
+    const array = new Uint8Array(132);
+    window.crypto.getRandomValues(array);
+    const token = Array.from(array, (byte) =>
+        byte.toString(16).padStart(2, '0')
+    ).join('');
+    setTokenToCloud(email, token);
 };
 
 export const setTokenToCloud = (email: string, token: string) => {

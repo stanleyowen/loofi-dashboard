@@ -8,7 +8,6 @@ import {
     LinearProgress,
     SlideProps,
 } from '@mui/material';
-import { initializeApp } from '@firebase/app';
 
 import Navbar from './navbar.component';
 import BaseLayout from './base.component';
@@ -16,7 +15,7 @@ import BaseLayout from './base.component';
 type TransitionProps = Omit<SlideProps, 'direction'>;
 
 // eslint-disable-next-line
-const App = ({ properties, handleChange, config }: any) => {
+const App = ({ properties, handleChange }: any) => {
     const HOST_DOMAIN: string =
         process.env.REACT_APP_HOST_DOMAIN ?? window.location.origin;
     const musicSession = JSON.parse(
@@ -43,7 +42,6 @@ const App = ({ properties, handleChange, config }: any) => {
     });
 
     useEffect(() => {
-        initializeApp(config);
         onValue(ref(getDatabase(), 'loofi-music/'), (snapshot) => {
             const data = snapshot.val();
             setRawData(snapshot.val());

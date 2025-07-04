@@ -22,6 +22,23 @@ interface EnvConfiguration {
     measurementId: string | undefined;
 }
 
+// Initialize Firebase once at the top level
+const config: EnvConfiguration = {
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    appId: process.env.REACT_APP_ID,
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID,
+};
+
+let firebaseApp: any = null;
+try {
+    firebaseApp = initializeApp(config);
+    console.log('Firebase initialized');
+} catch (error) {
+    console.log('Firebase already initialized');
+}
+
 // eslint-disable-next-line
 export default function App() {
     const [properties, setProperties] = useState<any>({
@@ -37,16 +54,7 @@ export default function App() {
         loggedIn: false,
     });
 
-    const config: EnvConfiguration = {
-        apiKey: process.env.REACT_APP_API_KEY,
-        authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-        projectId: process.env.REACT_APP_PROJECT_ID,
-        appId: process.env.REACT_APP_ID,
-        measurementId: process.env.REACT_APP_MEASUREMENT_ID,
-    };
-
     useEffect(() => {
-        initializeApp(config);
         const userEmail = getTokenValue('email')?.split('@')[0] + '-token';
         const userToken = getTokenValue('token');
         if (userEmail && userToken)
